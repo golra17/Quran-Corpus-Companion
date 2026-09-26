@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quran Corpus Companion</title>
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Quran%20Corpus%20Companion%22%2C%22short_name%22%3A%22Quran%20Corpus%22%2C%22description%22%3A%22A%20companion%20app%20for%20corpus.quran.com%20word-by-word%20Quranic%20grammar%2C%20with%20offline%20notes%2C%20bookmarks%2C%20and%20a%20growing%20offline%20grammar%20dictionary.%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f6f3ec%22%2C%22theme_color%22%3A%22%233f6b4f%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAPMElEQVR4nO3deVhU5R4H8O8MzAwguyyxyCoIiGjuFUJlmrk8atlTmc/VTCulTEtb7Vppt9IsLdGW22L3uVZ2NW3RSuuqRWpmSWKEKAqyyCbIOgzb/aPl8RLKLL8z5515f58/Nb7zJu933jNnznmPBipIz5jcqcbrMvHtzdyusefr2eXFeMIzayldCMXCedIzakqUgTSQJz2zF6oyaClCAJ78zL6o5pvNLeKJz9Rmy2pg0wrAk5%2BJwJZ5aFVzeOIzUVm6Gli8AvDkZyKzdH5aVACe/MwRWDJPzS4AT37mSMydr2YVgCc/c0TmzNseC8CTnzmynubvJQvAk585g0vNY7JvghlzRBctAL/7M2dysfncbQF48jNn1N285kMgJrW/FIDf/Zkz6zq/tZf6S8ac0YXznA%2BBmNS4AExqfxaAD3%2BYTP6Y77wCMKlxAZjUNAAf/jB58QrApMYFYFLjAjCpafn4n8mMVwAmNS4AkxoXgEmNC8CkxgVgUuMCMKlxAZjUuABMalwAJjUuAJMaF4BJjQvApMYFYFLjAjCpcQGY1LgATGpcACY1LgCTGheASc1V7QE4K3eDG%2BIjYhEZHI4gv0AE%2BwciyC8A/l6%2B0Ov1cNMZYNAboNfp0dbWCmOrCSZTC4ytLahvakRlTRXKz1WiorYKpVXlOF50ApW11Wr/bzkdLgARbw9PXDFgGAbFJSMxMg4Rl/WBVqMx62f1Oj30Oj3g4fnnnyVGxv3lvztXV4NfC0/g2Kk8fJfzPU6VFpGNX1Ya3hXCet69vDBmWDpSU0YgpW8SXLQudn39supyZP38Pb76YR9yC/Pt%2BtrOggtghdiwKNx49URcNzQNBp1e7eEAAHIL87F1z6fY82MWWtvb1B6Ow%2BACWCA6NALzpszC8KTBag/loqrP1%2BDtHe9hx/7d6OjoUHs4wuMCmMHPywd3TJiOiVeOgVbrGCfOCkoLseGjt3Eo94jaQxEaF6AHowaOxJLb74X3BR9QHcnOA19h7eY3YDQZ1R6KkPgs0EUYdHrMv3E2Jo8ap/ZQbHLDyNFIjknE8ndW43jRSbWHIxzHWM/tzN/bD5kPPu/wk/8PfYJCkfng87h2yCi1hyIcLkAXYYEhyHzwOfQNj1Z7KKR0Lq54YtYDuDF9gtpDEQoX4AKxYVFY98BzCOkdrPZQFKHRaLDg5rmYNf5WtYciDC7A74L9A7Fy/jL4efmoPRTFzRp/K6ak3aD2MITABQDg5eGJlfOXobePn9pDsZsF0%2BbiygHD1B6G6qQvgFajwfK5jyDysnC1h2JXWq0Wf79jMaJCItQeiqqkPw06fexNGBSXrPjr1DU14Me8bBzJz0Hh2WKUVJahsbkJzSYj9K56eLi5I9g/EBHBYUiOScTQhIGKfxZx0xuwdOYizFu1RNrLJ6T%2BIiy%2BTyzWL14JVxflLmLLKfgVW/Z8gm%2ByD6Ctvd2in02OScTUtPG4Zkiq2VeWWmPTl1vw%2Bsf/UixfZNIWwNXFBW8%2BulaxQ5%2Bq2mqs2/IW9vyUZXNWXHgMFt5yN/pH9yMY2V91dHZi3qolyCs6oUi%2ByKT9DDApdZxik/9Q7hHMeW4RyeQHgPziAix46TFs2rWVJK8rrUaDeVNnKZItOikL4OHmjpk33KJI9teHv8EjG5ajtqGONLe9ox2vb38Xaza/hs5O%2BkV7UFwyRgh8latSpCzAbddNha%2BnN3lu1s8HseKdF9HeYdmxviW27duJzK1vKZJ91%2BS/KZIrMukKYNDpMSVtPHnu6bIirNj4EjoUeHfu6j///QQ79u8mz40Ni8Lg%2BBTyXJFJV4DRQ9PgRXxpc3tHO1ZsfAnNLfa75PjlD99AWXU5ea5s3xBLVwAlrvD8YPc2nCg%2BRZ57KUZTC17YtJ4896qU4Qjw8SfPFZVUBegbHo1%2BEX1JM%2BubGvDvXVtIM811OC8bh/OySTNdtC4YMyydNFNkUhUgNWUEeebmrz9GY3MTea653vp0E3nmlQOGk2eKSqoCXJlMe/FXW3s7Ps36gjTTUsdO5SG/uIA0s390P4e9BdRS0hQgwMcfcX1iSDOzfj6ImvrzpJnW%2BDTrS9I8rVYr9M4XlKQpwOB%2BKdAQX0%2Bz96fvSPOste/IAfIvx%2BxxgaAIpClAQjdbDdqivaMdB3N/JM20Vk19LX4l3hkuPiKWNE9U0hQgvg/tLzSv8ISqH367%2BoH4bFBMaBR0Ls5/tbwUBdBqteQ3uf9y%2Bjhpnq1yicfj6uKC6LBI0kwRSVGA0N6XwU1vIM3MLXTuAgBAtAR3i0lRgCD/APLMorMl5Jm2qKk/j4bmRtLMIF/6fzfRyFEAP/pfZElVGXmmrYorSknzAhX4dxMNF8AKdY31aDI2k2ZSKKuuIM1T4o1DNFIUIMCnN2meCF9%2Bdae2gXZcMlwUJ0UB3A1upHnUE43KeeK70NwMtCcORCRFAaif4iLi4Q8ANBppv5cw6LgATsFAfAq0ta2VNI8K9bhEefyTkuQoAPEvsk3QTaRa22jHRf3GISIpCqAB7UVwdrjt1zrEA1NyMy5RSFGAltYW0jydq5jXyOh0OtI8k6CHepQkKYCJNE/nSjvRqFCPi/qQSkRcACtQn1al4mFwJ81rMdGunCKSogBG4u1KfHrRb6pFgXqzL1G/76AkRQGq62pI83w8vUjzqPgQP92GentHEUlRgIqaKtI8Xy9fIW8WCfEPIs07R/zGISIugBW0Gg1CAi4jzaQQFhRKmldSKd4Vr9SkKEAlcQEAIDwohDzTFr6e3uRbmRRXcAGcQknVWYufztIT6nuMbZUQFU%2BeWVReTJ4pGikK0NrWilNlhaSZSQpMOFskRdKOx2hqwemzZ0gzRSRFAYDfdnGg1D86AS5a5Z4tZqkhCQNJ8/LPFKCjo4M0U0TyFID4%2BVe93D2QHJtAmmktPy8fJBKvSEcLcknzRCVNAY7k55Bnpg6g32zXGqMGjiS/cO37X8TY9Etp0hTgTEUpzhDfND5m%2BNWKPmLVXBOvGkua12RsRg6vAM7nu6OHSPN8Pb0xauBI0kxLJUbFk5%2BR2p/zA/lZM1FJVYCsnw%2BSZ864/mbyTXctMXvCdPLMXYf2kGeKSqoCHC3IJf92MzYsCtcMTiXNNNfg%2BBQMSxxEmllTX4tDuUdIM0UmVQE6Ozvx8befk%2Bfee9Ns8gfv9cSg02Px9Pnkudu/%2BVzRx7yKRqoCAMCO/V%2BR3x/g7%2B2HRbfeQ5rZk/umzUEo8fVIplYTtu3bQZopOukKUN/UgM8PfE2ee%2B3gVNw%2Bdhp5bnempk8gP/MDAJ/t3y3FJdAXkq4AALBx5wcwmuif6Ttn0u2YdvUk8twLTbpqLBZMm0OeazQZ8e7OzeS5opOyAOfqavD%2B7m3kuRqNBvdOuxPzpt5B/v2AVqvFnEkz8OBt8xU56/T%2B7m2oqa8lzxWdlAUAfvuFV50/p0j2LaMnY90Dz5E9k7hveDReXvgMZlyvzCHWmYpSbNq1VZFs0WnSMyaLusuN4oYlDsLK%2BcsUO4/f2dmJb7IP4KN9O/DT8aMW/3z/6H6Ymj4B1w4ZpdgePZ2dnVj48lJk5x9TJF90UhcA%2BO1syk1XT1T8dSpqqnA4LxtHT%2BaiqLwEZ6vL0WhsQoupBXqdHu4GdwT7ByIiOAzJMQkYmnA5QgOCFR/Xpl1b8fr2dxV/HVFJXwC9To8Ni1ciNixK7aHYXU5BLu5fs1Sq8/5dSfsZ4A%2BmVhMefXUFqmqr1R6KXZ2trsATbzwv9eQHuAAAfjs8eWj900I99lRJdU0NeGj901Ke9emKC/C7gtJCPPbaM8Lu/U%2BlrrEei19ZJsX9vubgAlwg%2B8Qx3L/mcad9Z6ypr8XCtUtx/MxJtYciDC5AF/nFBZj/wsMorqS9eUZtJ0tO455VS1BQSrs5gKPjAnSjrLocd69cjF2H9qo9FBJf//gtMlY/gvJzlWoPRTjSnwbtyXVD07DolnvQy91D7aFYrNHYhFc%2B/Cc%2BP0h/8Z%2Bz4AKYIcDHH7MnTse4kaMd5qkp%2B47sx7otb5JvC%2BlsuAAWiAmNxN1TZmJE0mC1h3JR%2BcUFePWjjTicl632UBwCF8AKMaGRmJI2HmOGpQvzsIzK2mqs3fw6vlXgvmdnJt4e3w6goLQQL76/Aa9t24jRQ0chNWUELo8foOqjk/y8fGGU4Iku1HgFIOKmd8PwpMsxpN9AJET2RUxopN0L0dxixP1rHufz/BbgAijE1cUFMaFRiAmNRJB/AIJ8AxDkF4AA397wMLjDoNdDr9PDoDOQ3jxTU1%2BLjNUPo7SqnCzTmXEBBOFucMPahc%2BQbHJVXFmKe1c/It39vdbgL8IE0dxixMPrl5O8c4cHhuLZeU/ATS/GB3SRcQEEUlNfi4cynyJ5506MjMOTdy4Ragt3EXEBBFNcWYpHNywnOaMzsv8QLJmeQTAq58UFEFBuYT6efHMlyc0q40ZeizmTZhCMyjlxAQR14NhhrH5vA0nWjOunYUraDSRZzoYLILAd%2B3fjrc82kWQtuPkupA26giTLmXABBPfuzs34%2BNsvbM7RajRYOnMRUmKTCEblPLgADmDN5tdInm2g1%2BnxzN2PISokgmBUzoEL4AA6Ojrw9NurkVPwq81ZXh6eWJWxDIG%2BvQlG5vi4AA6ipdWEx15dQXIze6Bvb6zKWAZP914EI3NsXAAHUtfUgCXrniLZ0zQqJAL/uOdx6HV6gpE5Li6AgymvqcTDRHsYpcQmYenMRQ5zl5sSuAAO6GTJaSx941m0trfZnJU26Arcd/NcglE5Jr4alEmNVwAmNS4AkxoXgEmNC8CkxgVgUuMCMKlxAZjUuABMalwAJjUuAJMaF4BJjQvApMYFYFLjAjCpcQGY1LgATGpcACY1LgCTGheASY0LwKSm3Zu5Xd49MZj0eAVgUuMCMKlxAZjUtADAnwOYjPZmbtfwCsCkxgVgUvuzAHwYxGTyx3znFYBJjQvApPZ/BeDDICaDC%2Bf5X1YALgFzZl3nNx8CMal1WwBeBZgz6m5eX3QF4BIwZ3Kx%2BcyHQExqlywArwLMGVxqHve4AnAJmCPraf6adQjEJWCOyJx5a/ZnAC4BcyTmzleLPgRzCZgjsGSeWnwWiEvARGbp/LRpMqdnTO605ecZo2LtG7NN3wPwasBEYMs8JJvAvBowe6N4Ayb7JphXA2ZPVPNNsUnLKwKjpsSbrF3etbkMzFpKH1n8DzUEe%2BreVXCWAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAt5UlEQVR4nO3dd5iU9bnG8Xtmdpfthd2lLCAdpIiIIoJRsIBdjD2WqFFjRaOx965BjUZjjxo1x1gSSzRqxIaIYkWaIEqHpS4Lu2wvc/44FzmIoCyz7/u88/6%2Bn%2BvKdf5IcnLPjDvPPc/bIkKrGXne2Lh1BgAIu4kPvBqxzhAGvIktxJAHgOCiHGw73qifwLAHgORHKdgy3pRNMPABIPwoBP/H%2BTeBoQ8A7nK5DDj5whn6AIDNuVYGnHqxDH4AwM9xpQiE/kUy9AEA2yvMZSC0L4zBDwBoLWEsAqF7QQx%2BAIBXwlQEQvNCGPwAAL%2BEoQgk/Qtg8AMArCRzEUja4Ax%2BAEBQJGMRiFoH2B4MfwBAkCTjXEqqxpKMbzAAwC3Jsg1IipAMfgBAsgl6EQj8IQCGPwAgGQV9fgW6AAT9zQMA4KcEeY4Fcj0R5DcMAIDtEbRDAoHbADD8AQBhFLT5FqgCELQ3BwCA1hSkOReIdUSQ3hAAAPxgfUjAfAPA8AcAuMh6/pkWAOsXDwCAJcs5aFYAGP4AANjNQ5MCwPAHAOD/WcxF3wsAwx8AgB/zez76WgAY/gAAbJ2fc9K3AsDwBwDg5/k1L30pAAx/AAC2nR9z0/MCwPAHAKDlvJ6fnhYAhj8AANvPyznqWQFg%2BAMAkDiv5qknBYDhDwBA6/Firpo/CwAAAPiv1QsAv/4BAGh9rT1fW7UAMPwBAPBOa87ZVisADH8AALzXWvOWcwAAAHBQqxQAfv0DAOCf1pi7CRcAhj8AAP5LdP4mVAAY/gAA2ElkDnMOAAAADtruAsCvfwAA7G3vPGYDAACAg7arAPDrHwCA4NieudziAsDwBwAgeFo6nzkEAACAg1pUAPj1DwBAcLVkTrMBAADAQdtcAPj1DwBA8G3rvGYDAACAg7apAPDrHwCA5LEtc5sNAAAADvrZAsCvfwAAks/PzW82AAAAOOgnCwC//gEASF4/NcfZAAAA4CAKAAAADtpqAWD9DwBA8tvaPGcDAACAg7ZYAPj1DwBAeGxprrMBAADAQRQAAAAc9KMCwPofAIDw2Xy%2BswEAAMBBFAAAABz0gwLA%2Bh8AgPDadM6zAQAAwEEUAAAAHEQBAADAQf8tABz/BwAg/DbOezYAAAA4iAIAAICDKAAAADiIAgAAgIMiEicAAgDgGjYAAAA4iAIAAICDKAAAADiIAgAAgIMoAAAAOIgCAACAg6JcAggAgHvYAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOCgFOsAAFouEokoNytHhbkFKswrUNvcAhXmFqggJ19ZGZnKzshSZnqGstIzlZWRqYw2GUqJxRSLpSgWjSollqKUWEzRSFRNzc1qbGpUU1OTmpqb1NjUqIamRtXU1aqqplrVtdWqqq1WVW2NqmqqVF6xTmsr16lsfbnWVvzfv9ZXVSoej1u/LQBagAIABFj7gmJ17dhFnYo7qlNRB3Uq7qiSog4qKWqv1JTUVvnfSInFlBKLJfT/o6GxQcvLVqp09QotW7NCpWv%2B7/8uXrFEy8tWUQ6AAKIAAAEQjUTUvaSr%2BnTpqZ6du6lXp%2B7q2ambcjKzraNtk9SUVO3QvrN2aN/5R/9edW2N5pcu0rxlCzVv2UJ9t3S%2Bvl8yXw1NjQZJAWwUGXneWKo54LP0tHT179ZHA3vuqJ169Ff/7n2UlZ5pHcs39Q31%2BnbxPM2YP1uz5s/RzAVztH5DhXUswCkUAMAnPUq6alj/IRo2YFcN7NEv4bV7mMTjcX23dL4%2Bnz1Vn30zVbMWzFFjU5N1LCDUKACAR2LRmHbdcWeNHDxcw/oPUVF%2BoXWkpFFdW6Ov5k7XpGlT9NH0T1VVU20dCQgdCgDQiqLRqHbpvZP23fUX2mvnPZSblWMdKek1NDXqi9lf64OpkykDQCuiAACtoHNxiQ7dc7QOGLavCnLyrOOEVkNjgyZNm6LXP56gqXNncHUBkAAKALCdUlNStffgPXToiDEa3HugIpGIdSSnlK5ZqTc%2BmaA3p7yrsvXl1nGApEMBAFooJzNbR%2Bx1kI4cdYgKcvKt4zivsalJ73wxUc%2B/%2B4oWlC62jgMkDQoAsI3aty3WMfscrkNGjFZGm3TrONiCz775Ss%2B9%2B4q%2B%2Bna6dRQg8CgAwM8ozi/UKQcdp4OG76dYlEv3ksGsBd/qL6/9TVPnzrCOAgQWBQDYitysHJ045mj9cu%2BDlJaaZh0H2%2BGrb6frsdf%2BptkL51pHAQKHAgBsJjUlVcftN1a/Gn2kU3fnC7NJ06bowZee1PKyldZRgMCgAACbGNZ/iC445kx1Ku5oHQWtrL6hXs9OeEnPTnhJ9Q311nEAcxQAQFKHwnY6/6jT9YtBw6yjwGMrylbp/n8%2BrsnTP7WOApiiAMBpkUhEY/c6UGcfcYrS0ziz3yXvfTlJ977wqCqqKq2jACYoAHBW%2B4JiXX7SOA3pO8g6CoyUV67TXc8%2BqMkzPrOOAviOAgAnHbjHvhp39Bmc5AdJ0tuffaB7X3hE1bU11lEA36RYBwD8lJ7WRhcff47G7D7KOgoCZMzuo9SvWx9d/5c/aH7pIus4gC%2Bi1gEAv%2BzQvrMevvROhj%2B2qEu7Ej106Z06aI/9rKMAvqAAwAn7DNlTj1x2l7p13ME6CgKsTWqaLj9pnC478XylxliQItz4Jxyhd8pBx%2Bm0Q35lHQNJ5ODh%2B6tTcUdd%2B9gdXCWA0GIDgNBKjaXo6lMuYvhju%2Bzca4AeumS8urQrsY4CeIICgFDKzczW3RfcpNFDR1pHQRLrVNxRD1wyXoN69reOArQ6CgBCpzCvQPddfDtf2mgVuZnZuvP8G7R7/yHWUYBWRQFAqLQvKNZ9v7tN3Tp0sY6CEGmTmqZbz7pKew8ebh0FaDUUAIRGp%2BKOuu/i23iQDzyRGkvRDb%2B5lMNKCA2uAkAodC4u0Z9%2Bd6sK8wqsoyDEotGorvz17xSPx/XOFx9axwESwgYASa84v1B3j7uR4Q9fRCMRXfnrCzV84G7WUYCEUACQ1PKzc3X3uBvVvm2xdRQ4JBaN6cbTL9POvQdYRwG2GwUASSsrPVPjz7teO7TvbB0FDkpLTdPtZ12jPl16WkcBtgsFAEkpFo3ppjMv58sXpjLTM3Tb2VerKK%2BtdRSgxSgASErjjj5Du/bd2ToGoKK8trr1rKvUJjXNOgrQIhQAJJ0jRx6iI/Y%2ByDoG8F99d%2BilK06%2BUJFIxDoKsM0oAEgqu%2B04WOcfdbp1DOBH9hmyp0464BjrGMA2owAgaRTnF%2Bq6036vaJR/bBFMpx3yKw3uPdA6BrBN%2BCZFUohFY7r%2BN5coNyvHOgqwVdFIRNecerHys3OtowA/izsBIimcfugJGtijn3WMpNAcj6t0zXLNX7ZIy9as0IqylVq5drXWb6jQ%2BqpKbajeoIamRjU2NqqxuUkpsRSlpqQoLSVVOVk5ysvKUX52njoUtlOHwnbqXNRRPTt3V3F%2BofVLSwpFeW111a9/p8sfulnxeNw6DrBVFAAE3tB%2Bu%2BhXo4%2B0jhFY9Q31mvb9N5r%2B/SxN%2B36W5i6Zp9r6um3%2B7zc0NqihsUHVqtG6DRVaspX/XE5mtvp366NBvfpr514D1b97X0U56W2Ldu8/RMfue7ief/dV6yjAVkVGnjeWiorAys7I0l%2BvuZ/rrDdTW1%2BrD7%2Beog%2B//kRfzJmm2vpa3zPkZuVojwG7atQue2rYgCGKRWO%2BZwiy%2BoZ6nX7777RkVal1FGCLKAAItCtOukAH7rGvdYzAmLtknl6e%2BIY%2BmDpZNXX%2BD/2tyc/O1ejdR%2BmXex%2BskqIO1nECY%2Bb82brgnqvUzKEABBAFAIE1rP8Q/eHc66xjBMLns7/W395%2BUdO%2Bm2Ud5SdFIxEN32l3/frAY9R3h17WcQLhz/94XP/44DXrGMCPUAAQSFnpmfrrNfc7f%2BLZzPlz9OirT2v6vG%2Bso7TYXjvvoTMOO0ldO7j9rIba%2Bjqdeus4rShbZR0F%2BAEuA0Qg/ebQE5we/uWV63XH3%2B7TuHuuTMrhL0mTpk3R6bdfqIdfeSpQhyv8lp7WRuf%2B8jTrGMCPUAAQON06dHH6Vr/vfzVZp9x8nt6a8l7SX0bW2NSk5955WafeMk5ffzfTOo6ZvQcP1y59drKOAfwABQCBc8ExZzp5Rnltfa1ufeoe3fjEnaqo3mAdp1WtLF%2Bti%2B67Vg%2B9/Fc1NTdZxzEx7ugzuIslAoV/GhEoew8eriF9B1nH8N3S1aU6%2B87LNOHzidZRPBOPx/X8u6/o4vuuU3nlOus4vutR0lWH/%2BIA6xjAf1EAEBgpsZjOPuJU6xi%2Bm/b9LJ09/lItXL7YOoovpn0/S7/9w%2B%2B1oNSN17upUw46TulpbaxjAJIoAAiQg4fvr5Ki9tYxfDVx6se65M83aENNlXUUX61eV6Zx91ypad8H%2B7LG1laQk68j9j7YOgYgiQKAgEhNSdXJBx5rHcNX734xSTc%2BeZcaGhuso5jYUFOlyx64UV/NnW4dxVe/2v%2BXymiTbh0DoAAgGA7/xQFOXfb3/leTdevT96i5udk6iqm6hnpd9fCtgb/BUWvKy87VUaMOtY4BUABgr01qmk4cc5R1DN98NXe6bnuK4b9RbX2drnrkVs0vXWQdxTfH7neE0tPYAsAWBQDmDhi2r9rmFljH8MWC0sW69rE71NDUaB0lUKpqq3XZgzdp9boy6yi%2ByM3M1oF77GMdA46jAMBUJBLRMfsebh3DFxtqqnT1o7epqqbaOkogrVlXpuseu8OZcyKO3ucwRXicMgxRAGBq%2BMDd1KVdiXUMz8Xjcd3y1D0qXbPCOkqgzV70ne578THrGL7oXFyi4QN3s44Bh1EAYOq4fY%2BwjuCLlyb%2BW1NmfmEdIym8NvltTZo2xTqGL47dd6x1BDiMAgAzPTt10869B1jH8FzpmpV67F9/s46RVP743MOhux3ylgzuPVA7tHf7aYmwQwGAmUNHjLaO4Ll4PK47n/2zauvdfRre9iivXKf7HTkUcPDw/awjwFEUAJhIS03T/kNHWsfw3L8%2B%2Bo%2Bmzp1hHSMpTfh8oj5x4LDJmN1HOfnwK9ijAMDE3jvvoZzMbOsYnlpVvkYPv/JX6xhJ7e6/P6iq2nBfNdE2t0B7DNjVOgYcRAGAiYNH7G8dwXNP/PtZ1dSx%2Bk/EmvVr9cK7r1rH8ByHAWCBAgDfFecXapfeO1nH8NTilUv19mcfWMcIhRff/5fWb6iwjuGp3QfsqqyMTOsYcAwFAL4bOXhE6G%2BA8sTrf%2BdWv62kurZGz074p3UMT6XGUjRi4FDrGHAMBQC%2BGzVkhHUET323dL4mfv2xdYxQefnDN7Um5LcJ3nvwcOsIcAwFAL4qymurAd13tI7hqcdf%2Bx/F43HrGKFS31Cvp996wTqGp3bvP4QHBMFXFAD4au/Bw0O9/l%2B0YqmmzPrSOkYovTnlPVVUVVrH8Eyb1DQNGzDEOgYcQgGAr34xaJh1BE%2B99tF/rCOEVkNjg96c8p51DE9xOSD8RAGAb9LT2minnv2sY3imrqFeb30a7gFl7bWP/hPqwyu77TjYOgIcQgGAbwb3HqjUlFTrGJ55/8uPtKGmyjpGqC1dXaqp34X3zorF%2BYXq1qGLdQw4ggIA3wztt4t1BE%2B9%2BtFb1hGc8K9J4T7MwhYAfqEAwDe7h7gAzC9dpNkL51rHcMJH06doXYhvDLRbv8HWEeAICgB8UZRfqC7tO1nH8MyHX39iHcEZjU1N%2BmTm59YxPDOoZ39FQ3ylDIKDAgBf7NQj3Nf%2BfzwjvAMpiD6a/pl1BM9kpmeoW8cdrGPAARQA%2BGJAiAvAqvI1mrtknnUMp3w552vVNdRbx/DMgO59rSPAARQA%2BGJgiO/%2BN3lGeH%2BNBlVtfZ2%2BnDPNOoZnwlyYERwUAHiuTWqaenXuYR3DMx9TAExMnv6pdQTPhP122QgGCgA813eHXkqJxaxjeKKmrlZfz51pHcNJH4f4RMAu7UqUnZFlHQMhRwGA53p17m4dwTOzF85VQ1OjdQwnlVeu15JVpdYxPNOjpKt1BIQcBQCe69mpm3UEz8xaMMc6gtPC/P736EQBgLcoAPBcj1AXgG%2BtIzjtmwXhvflSj5Ju1hEQchQAeCoaiah7x/De2/wbCoCpUG8AOAQAj1EA4KmSoo5KT0u3juGJJSuXqaJ6g3UMpy1Yvlg1dbXWMTzRvYSbAcFbFAB4qmuHztYRPMP6315zc7NmLwrnYYCs9Ey1zS2wjoEQowDAUyXFHawjeIa7/wXDd0vmW0fwTElRe%2BsICDEKADxVUhTeAhDmS9CSSZg/h46FFAB4hwIAT3UKcQFYtjq8gyeZLFm1zDqCZ8JcoGGPAgBPdQzpF1hDU6NWrF1tHQOSloZ5A8AhAHiIAgDPRCMRdShsZx3DE6WrV6i5udk6BiSVrS9XdW2NdQxPcAgAXqIAwDN52XlKjaVYx/DE0hCvnZPR0pAejinKa2sdASFGAYBn2ubmW0fwTJhPPEtGYT0MUJCTbx0BIUYBgGfCfA3zirWrrCNgE8vLVlpH8ERmeobS09pYx0BIUQDgmcIQF4DyyvXWEbCJdRsqrCN4JsybNNiiAMAzYf7iWkcBCJQwfx4cBoBXKADwTH5OnnUEz6zbEN6Bk4zC/HnkUwDgEQoAPJOTmW0dwTMcAgiWdZXhPQSQnZFpHQEhRQGAZ7LSw/nF1dzcrA08BTBQwrwByAzp3xHsUQDgmcz0DOsInlhfVanmeNw6BjYR5nMAskL6dwR7FAB4JqwbgPUh/rWZrBqaGkN7N0A2APAKBQCeCesXV219nXUEbEFdQzg/l7AWadijAMAzGW3SrSN4orGp0ToCtqC%2BscE6gifC%2BncEexQAeCY1JdU6gifCOmiSXWNjOItZSko4n6cBexQAeCYWi1lH8ERDSAdNsmsIaTFLiYbz7wj2KADwTFi/uBpDOmiSXVg3M2Et0rBHAYBnwvrFVc8GIJDCupmJhbRIwx4FAJ5JCWkBCOuqOdmF9XMJ698R7FEA4JloJJz/eHEVQDCxAQBaJpzf0AiEsN4rjy/kYArrL%2BWm5ibrCAgpCgA80xTSX8qpqeG8vDHZhfWy07BuNmCPAgDPhPWXS2qM67KDKC20BSCc5zbAHgUAnmlsCmkBCOmgSXZh/VzCenkj7FEA4Jmm0BYANgBBlJoazs%2BFDQC8QgGAZ9gAwE9h/VwoAPAKBQCeCevT2TgHIJjCeg4AhwDgFQoAPFNVW20dwRNpqWnWEbAFaSnh/Fy4CgBeoQDAM9U1NdYRPJGdmWUdAZtJicWUlZFpHcMTtXW11hEQUhQAeCasG4D87DzrCNhMmD%2BTdRvWW0dASFEA4JmwFoA2qWlKT0u3joFN5GXnWkfwzLoNFdYREFIUAHimqiacBUCS8rJzrCNgE6HeAFSyAYA3KADwTEVVpXUEz4R54CSjgpzwfh4cAoBXKADwzNrKcusIngnzyjkZhbmQlbMBgEcoAPBM2frwFoB8CkCg5OWE8/Nobm5WZfUG6xgIKQoAPLO2IrwFoCivrXUEbKJD23bWETyxvqpC8XhYH6wNaxQAeGZtxTrrCJ7p1K7EOgI20SWkn0eY/4ZgjwIAz5SFeAPQuaijdQRsonNIC8Cy1cutIyDEKADwTH1Dvcor11nH8ESndhSAoCjIyVd2Rjjvzrh0Val1BIQYBQCeWrZ6hXUETxTlteVmQAER1vW/JC1lAwAPUQDgqeVlK60jeKZTcQfrCFDICwAbAHiIAgBPhfkYZliPOyebzu07WUfwDBsAeIkCAE%2BVrgnnIQBJ6tahi3UESOrTpYd1BE9U19aE%2BlJa2KMAwFNh/gXTr1sf6wjOi0Yi2rFrb%2BsYnli6mvU/vEUBgKcWlC4K7Y1M%2BoV08CSTrh27KCs90zqGJxavXGYdASFHAYCnaupqtbxslXUMT%2BRl56qkiBMBLQ3ovqN1BM/MWfSddQSEHAUAnptfutA6gmcGdO9rHcFpYX7/KQDwGgUAnpu3bKF1BM9wHoCtsBaApuYmfbdkvnUMhBwFAJ4LcwHoTwEwk5%2Bdqy7twnkJ4PzSRaprqLeOgZCjAMBz3y763jqCZ/p06anczGzrGE4aPnCoIpGIdQxPzF7I%2Bh/eowDAcyvLV2v1ujLrGJ6IRqMaNmBX6xhO2nPQ7tYRPDN74VzrCHAABQC%2BmDl/jnUEzwzfaah1BOe0SU3TbjsOto7hmdmcAAgfUADgi1khLgDD%2Bg1RLBqzjuGUXXfcWelpbaxjeGLdhgotWrHEOgYcQAGAL2YuCG8ByMrI1KBe/a1jOGXPQcOsI3jm89lTQ3vzLAQLBQC%2B%2BG7JfFXX1ljH8MyIgRwG8EssGgv1%2B/3ZN19ZR4AjKADwRVNzk6bOnW4dwzP77PoLRaP8Oflhz0G7qyAnzzqGJ5rjcX02e6p1DDiCbyz45tNvwvvFVpTXVsND/Ks0SMbudaB1BM/MXfy91m%2BosI4BR1AA4JvPQ/7L5rARo60jhF6n4o4a0meQdQzPfMr6Hz6iAMA3y8tWhvoRp7sP2FXtCoqsY4Ta4b84ILQ3/5E4/g9/UQDgqymzvrSO4JloJKKDh%2B9vHSO0UlNSdeCwfa1jeKa8cj3X/8NXFAD4auLUj60jeOqQEaOVEuOeAF44YNg%2BysvOtY7hmXe//FDNzc3WMeAQCgB8NXP%2BHK1Zv9Y6hmeK8wt18HDOBWhtaalpOuWg46xjeGrCZxOtI8AxFAD4Kh6Pa9LXn1jH8NTJBx6j1JRU6xihcsReB6k4v9A6hmcWr1yqbxeH96FZCCYKAHz3QcgPAxTnF4b6UjW/ZbRJ1wljjrKO4Sl%2B/cMCBQC%2BmzHvm9A%2BHXCjE8ccFdp71fvt2H3HKj/Ex/7j8bgmfEEBgP8oAPBdczyut6a8ax3DUwU5%2BTpq1GHWMZJeUV5bHbvfWOsYnpoxf7ZWlK2yjgEHUQBg4o1P3g39A09OPvAYlRS1t46R1C4%2B/hxlpWdax/DUm5%2BEuwwjuCgAMLG8bKWmzp1hHcNT6WltdOkJ54f6xjVeGj10pEbsFO7bK5dXrtc7X3xoHQOOogDAzOsfT7CO4Lld%2Buykw/Y8wDpG0inIyde4Y860juG5Vz58Qw2NDdYx4CgKAMxMmjZF5ZXrrGN47uwjTuEWwS108fFnKzcz2zqGp%2Bob6vXqpDetY8BhFACYaWhs0EsT37CO4bnM9AxdcdIFinIoYJsctucY7bXzHtYxPPf2Zx9oHU/%2BgyEKAEy9%2BuEbqq2vs47huSF9B%2Bk3h55oHSPwduzaWxc4sPqPx%2BN68f1/WceA4ygAMFVRvUFvTXnPOoYvThxzlBO/bLdXUX6hbj7zCifuovjZ7KlatGKpdQw4jgIAcy%2B896oTD0GJRCK65tSLNaB7X%2BsogZOVnqk/nHNtqG/3u6ln3nrBOgJAAYC90jUrNOFzN%2B6E1iY1TbeddbW6duhsHSUw0tPa6NazrlLPTt2so/jio%2Bmfaub8OdYxAAoAguGpN59TY1OTdQxf5GXn6p4LbqYE6P8L0eDeA62j%2BKK5uVmP/esZ6xiAJAoAAqJ0zUq98ck71jF80za3QPdeeIszv3q3JCsjU%2BPPvV5D%2Bg6yjuKbN6e8y7F/BAYFAIHxzFsvOHVTlIKcfN1/0e3abcfB1lF8V5RfqD9fdId27j3AOopv6hrq9eQbz1nHAP6LAoDAWL2uTP/44HXrGL7KTM/QHedcq6NGHWodxTeDevbXo5fdpe4lO1hH8dU/339Na0L%2BFEwkFwoAAuWZt15Q2fpy6xi%2BSonFNO7oM3Tdab8P9YNvIpGIjt13rO658Ga1zS2wjuOrdRsq9D8T/mkdA/gBCgACpbq2Rg%2B/8lfrGCb23XUvPXHVnzSkT/iOibcrKNLd427UuUeeplg0Zh3Hd/f/4zFV1VRbxwB%2BgAKAwJnw%2BUTNnD/bOoaJ9m2Ldfe4G3X5SeNUkJNnHSdhsWhMx%2B03Vn%2B9%2Bv5QFpttMWXWl3r3i0nWMYAfiYw8b2y4H8qOpNSrc3c9ctldTv5a3Kiqplp/%2B8%2BLejlJb5e856BhOvPwk9StQxfrKGZq6mp16i3jtLJ8tXUU4EcoAAis0w89QScfeKx1DHPllev13Dsv6/WP3w78GjkaiWj4wKE6%2BcBjtGPX3tZxzN334mN6aeK/rWMAW0QBQGClxlL0yOV3q0dJV%2BsogVBTV6v/fPq%2BXv/4bX2/dIF1nB/Iy87V6N1G6shRh6ikqIN1nED4ZsG3Ov%2BPV6g5zlcsgokCgEDr06WnHrp0vNOHArZk4fLFeueLD/XxjM81v3SRSYbczGwNG7CrRu0yQsMG7KaUGJ/RRvUN9frt%2BEu0cPli6yjAVlEAEHinHny8Tj34eOsYgbWqfI2%2B/HaaZs6brZkL5mjJymWe/OrMzshSv259NKhXf%2B3Se6D6d%2BuraJTziLfkrr8/qNcnv20dA/hJFAAEXjQa1T3jbnbqrnGJqK2v06IVS7Rg%2BWKtKFulFWtXaXV5mSqqKlVRXamqmmo1NjWqobFRzfFmpURjisVSlJaaqtzMHOVm56ggO08dCtupQ9t26tyuRD06dVX7gmLrl5YUJnw%2BUbc%2BdY91DOBnUQCQFArzCvSXK%2B4NxaVxCK9FK5bqrPGXqLa%2B1joK8LPY3yEplK0v161P3cMJVQis2vo6Xf/4eIY/kgYFAEnjizlf6%2Bk3n7eOAWzRvc8/wkl/SCoUACSVp958Xh9MnWwdA/iBlz98Q299%2Bp51DKBFKABIKvF4XLc//SfNXvSddRRAkvTR9E91/4uPWccAWowCgKRT11Cvqx%2B5TavK11hHgeNmLfhWNz95N%2BemIClRAJCU1laU64qHblZl9QbrKHDUkpXLdOXDt6iuod46CrBdKABIWvNLF%2Bnyh25WTR1nXcNf5ZXrdNmDN6miqtI6CrDdKABIat8s%2BFZXPXKr6vkVBp9sqKnS5Q/erOVlK62jAAmhACDpTZ07Q9c/Pl6NTU3WURBy6zdU6KI/Xau5S%2BZZRwESRgFAKHwy8wtd%2B9jtbALgmbUV5brwT9fou6XzraMArYICgND4ZOYXnBMAT6wqX6ML7rmaG/0gVCgACJWpc2fo4vuv4%2BoAtJrSNSt1wb1XaenqUusoQKuiACB0Zi%2BcqwvvvVory1dbR0GSm7dsoS649yqtKFtlHQVodRQAhNL80kU6587LNHvhXOsoSFKTpk3ReXdfoTXryqyjAJ6gACC0Np609d6Xk6yjIInE43E9/eYLuu4vf%2BDJfgi1FOsAgJfqG%2Bp105N3a8HyJTrtkF8pGolYR0KA1dbX6Y5n7uOBU3ACGwA44Zm3XtAl91%2BvtRXl1lEQUCvLV%2Bv8P17B8IczKABwxldzp%2Bv02y/SV99Ot46CgJk49WOdeftF%2Bn7pAusogG8iI88by2Os4JRoJKITxxytUw4%2BXimxmHUcGKqqrdZ9Lz6m/3z6vnUUwHcUADirR0lXXXHyBerTpad1FBiY9v0s3fb0vVq5lstF4SYKAJwWi8Z0wpij9OuDjlVqjHNiXdDQ1KgnX39Wz73zsprjfP3BXRQAQFK3Dl10wTFnakjfQdZR4KGvv5upe194lFv6AqIAAD8wcpcROveXp6l922LrKGhFq9eV6aGX/8o9IYBNUACAzbRJTdOvRh%2Bp4/c/Qulp6dZxkICGpka9%2BN6/9PSbL3BTH2AzFABgK/Kzc3XimKM1dq8DlZaaZh0HLfTpN1/p/hf/wkN8gK2gAAA/oyivrU464BgdsudoThRMAl/Nna4n//13zZg32zoKEGgUAGAbFeUX6qhRh%2BqwPccoOyPLOg42w%2BAHWoYCALRQRpt0HTx8fx016jCVFLW3juM8Bj%2BwfSgAwHaKRiLafcCuOmT4/ho%2BcCh3FTQwv3SRzhp/iRoaG6yjAEmHAgC0goKcPI3ZfR8dNHw/devQxTqOUz78%2BhPd8Ph4buoDtBAFAGhlvTp318hdRmjU4BHq0r6TdRwnvDrpLd3z/MPWMYCkQgEAPNSjpKv2HjxcI3Yaqt6deygSiVhHCq0n/v2snn7zBesYQNKgAAA%2BycvO1W477qyh/XbRbjsOVlFeW%2BtIoXPnsw/o3x9PsI4BJAUKAGCkS7sSDezRTwO699XAHjuqa4cubAgS1NzcrGsfu0OTZ3xmHQUIPAoAEBBZGZnq17WPenbqph4lXdWzUzd17dBZqSmp1tGSSl1DvX5//3WaOX%2BOdRQg0CgAQIBFo1F1aVeirh26qGNhe3Uq7qCOhR3UqbiD2hUUc%2BnhVlRWb9C4P16phSuWWEcBAosCACSpaCSi/Jx8tc3NV0FOvgpzC9Q2N1/5OXnKzshSVnqmMtMzlZWeocyMTGW0SVdaSqpisRTFolGlxFIUi8YUi0ZDeehh9boynXvXZVq9rsw6ChBIFAAAP3L%2B0afr6FGHWcdI2MIVSzTuj1eqsnqDdRQgcKLWAQAEzwP/fELvfTnJOkbCunXootvPvlpteJoj8CMUAAA/Eo/HdfvTf9KX306zjpKwgT366brTfq9olK87YFP8RQDYooamRl3z6O2au3iedZSE7TlomH5//DnWMYBAoQAA2Kqaulpd/tBNWrZ6uXWUhB0yYrR%2Bc8gJ1jGAwKAAAPhJ5ZXrdekDN2htRbl1lIT9%2BqBjNXavA61jAIFAAQDws0rXrNRlD96kqtpq6ygJu/DYs7T34OHWMQBzFAAA2%2BT7pQt0zaO3q6GxwTpKQqKRiK499WLt3HuAdRTAFAUAwDabOneGbn3qXjXHk/v2Iakpqbrtt1erR0lX6yiAGQoAgBb5YOpk3f/iY9YxEpaVkanx512v9m2LraMAJigAAFrs5Q/f0DP/edE6RsKK8trqrvNuUG5WjnUUwHcUAADb5fHX/kf//niCdYyEdWnfSX8451qlp7WxjgL4igIAYLvd/dxDmjzjM%2BsYCevXrY9uOP0yxaI8XRHuoAAA2G7Nzc266Ym7NGPebOsoCdtjwK669ITzrGMAvqEAAEhIXUO9rnrkVi0oXWwdJWEH7rGvfnv4ydYxAF9QAAAkrLJ6gy598EatLF9tHSVhJ4w5SkeNOtQ6BuA5CgCAVrFmXZku/fONqqiqtI6SsPOPOl37DvmFdQzAUxQAAK1m8cqluuLhW1RbX2cdJSGRSERXnvI7Dek7yDoK4BkKAIBW9c2Cb3XD4%2BPV1NxkHSUhqbEU3XLmlerduYd1FMATFAAArW7KrC9157MPWMdIWGZ6hsafd51KitpbRwFaHQUAgCfemvKeHn31aesYCSvIyded592ggpw86yhAq6IAAPDMsxNe0j/ef806RsI6FXfUHedcq4w26dZRgFZDAQDgqQdeekLvfPGhdYyE9d2hl2464wqlxLhbIMKBAgDAU/F4XHc88yd9Medr6ygJG9pvsC4/6QJFIhHrKEDCKAAAPNfY1KRrH7tD3y7%2B3jpKwkYPHamzjzjVOgaQMAoAAF/U1NXq8gdv0tLVpdZREnbcfmN13H5jrWMACaEAAPDNug0VuvTPN2ptRbl1lISdfcSpGj10pHUMYLtRAAD4annZSl324E2qqq22jpKQSCSiy0%2B6QEP77WIdBdguFAAAvvt%2B6QJd8%2BjtamhssI6SkJRYTDedcbn67tDLOgrQYhQAACamzp2hW566R83xuHWUhGS0Sdcfzr1OnYtLrKMALUIBAGBm4tSPdd%2BLj1rHSFh%2Bdq7uPP96tc0tsI4CbDMKAABTr3z4pp556wXrGAnrWNhe48%2B9TlnpmdZRgG1CAQBg7vHXn9Xrk9%2B2jpGwXp276%2BbfXqHUWIp1FOBnUQAABMIfn39Yk6d/ah0jYUP6DNJVp1ykKHcLRMBRAAAEQnNzs2588m5Nn/eNdZSE7TNkT51/9BnWMYCfRAEAEBj1DfW66uFbtaB0sXWUhB058hCdOOZo6xjAVlEAAATKhpoqXfrgjVpZvto6SsLOPPwkHbTHftYxgC2KjDxvbHJfhAsAAFqMDQAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOAgCgAAAA6iAAAA4CAKAAAADqIAAADgIAoAAAAOogAAAOCg6MQHXo1YhwAAAP5iAwAAgIMoAAAAOIgCAACAgygAAAA4iAIAAICDKAAAADgoKklcCggAgDsmPvBqhA0AAAAOogAAAOAgCgAAAA6iAAAA4KD/FgBOBAQAIPw2zns2AAAAOIgCAACAgygAAAA46AcFgPMAAAAIr03nPBsAAAAcRAEAAMBBPyoAHAYAACB8Np/vbAAAAHAQBQAAAAdtsQBwGAAAgPDY0lxnAwAAgIO2WgDYAgAAkPy2Ns/ZAAAA4CAKAAAADvrJAsBhAAAAktdPzXE2AAAAOOhnCwBbAAAAks/PzW82AAAAOGibCgBbAAAAkse2zG02AAAAOGibCwBbAAAAgm9b5zUbAAAAHNSiAsAWAACA4GrJnGYDAACAg1pcANgCAAAQPC2dz9u1AaAEAAAQHNszlzkEAACAg7a7ALAFAADA3vbOYzYAAAA4KKECwBYAAAA7iczhhDcAlAAAAPyX6PxtlUMAlAAAAPzTGnOXcwAAAHBQqxUAtgAAAHivteZtq24AKAEAAHinNedsqx8CoAQAAND6Wnu%2Bcg4AAAAO8qQAsAUAAKD1eDFXPdsAUAIAAEicV/PU00MAlAAAALafl3PU83MAKAEAALSc1/PTl5MAKQEAAGw7P%2Bamb1cBUAIAAPh5fs1LXy8DpAQAALB1fs5J3%2B8DQAkAAODH/J6PJjcCogQAAPD/LOai2Z0AKQEAANjNQ9NbAVMCAAAus5yD5s8CoAQAAFxkPf8CNXxHnjc2bp0BAAAvWQ/%2Bjcw3AJsKypsCAIAXgjTnAlUApGC9OQAAtJagzbdAhdkchwQAAMkuaIN/o8BtADYV1DcNAIBtEeQ5FugCIAX7zQMAYGuCPr8CHW5zHBIAAARd0Af/RkkRcnMUAQBA0CTL4N8o8IcAtiTZ3mQAQLgl41xKusCbYxsAALCSjIN/o6QNvjmKAADAL8k8%2BDdK%2BhewOYoAAMArYRj8G4XmhWyOIgAAaC1hGvwbhe4FbY4iAADYXmEc/BuF9oVtCWUAAPBzwjz0N%2BXEi9wcRQAAsDlXBv9GTr3YLaEMAIC7XBv6m3L2hW8JZQAAws/lob8p3oSfQCEAgOTHwN8y3pQWohQAQHAx7Lfd/wKewzTLwBIGAQAAAABJRU5ErkJggg%3D%3D%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22any%22%7D%5D%7D">
+<meta name="theme-color" content="#3f6b4f">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<style>
+  :root{
+    --bg:#f6f3ec; --panel:#ffffff; --ink:#22261f; --sub:#6b6a5d;
+    --accent:#3f6b4f; --accent-ink:#ffffff; --line:#e2ddcf; --danger:#b3492f;
+    --pos-verb:#2f8f5b; --pos-noun:#b8375e; --pos-particle:#b6862c;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1b1d17; --panel:#242620; --ink:#eee9dc; --sub:#a7a493;
+      --accent:#7fae8d; --accent-ink:#12140f; --line:#33352b;
+      --pos-verb:#5fbf8a; --pos-noun:#e17b9a; --pos-particle:#dcb15a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1b1d17; --panel:#242620; --ink:#eee9dc; --sub:#a7a493;
+    --accent:#7fae8d; --accent-ink:#12140f; --line:#33352b;
+    --pos-verb:#5fbf8a; --pos-noun:#e17b9a; --pos-particle:#dcb15a;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex; flex-direction:column;
+  }
+  header{
+    padding:.7rem .9rem calc(.7rem + env(safe-area-inset-top,0px));
+    padding-top:calc(.7rem + env(safe-area-inset-top,0px));
+    background:var(--panel); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:.5rem; flex-wrap:wrap;
+  }
+  header h1{font-size:1.05rem; margin:0; flex:1 1 auto; letter-spacing:.2px;}
+  nav.tabs{
+    display:flex; gap:.35rem; padding:.5rem .9rem; background:var(--panel);
+    border-bottom:1px solid var(--line); overflow-x:auto;
+  }
+  nav.tabs button{
+    border:1px solid var(--line); background:transparent; color:var(--sub);
+    padding:.4rem .7rem; border-radius:999px; font-size:.8rem; white-space:nowrap; cursor:pointer;
+  }
+  nav.tabs button.active{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+  .jumpbar{
+    display:flex; gap:.4rem; padding:.6rem .9rem; background:var(--panel);
+    border-bottom:1px solid var(--line); align-items:center; flex-wrap:wrap;
+  }
+  .jumpbar input{
+    width:4.2rem; padding:.45rem .5rem; border:1px solid var(--line); border-radius:.5rem;
+    background:var(--bg); color:var(--ink); font-size:.9rem;
+  }
+  .jumpbar button, .pill-btn{
+    padding:.45rem .8rem; border-radius:.5rem; border:1px solid var(--accent);
+    background:var(--accent); color:var(--accent-ink); font-size:.85rem; cursor:pointer;
+  }
+  .jumpbar .ghost{background:transparent; color:var(--accent);}
+  main{flex:1; min-height:0; display:flex; flex-direction:column;}
+  #viewFrame{flex:1; width:100%; border:0; background:var(--panel);}
+  .panel{padding:.9rem; overflow-y:auto; flex:1;}
+  .panel h2{font-size:.95rem; margin:.2rem 0 .6rem; color:var(--sub); font-weight:600;}
+  textarea{
+    width:100%; min-height:6rem; border:1px solid var(--line); border-radius:.5rem;
+    background:var(--panel); color:var(--ink); padding:.6rem; font-size:.9rem; resize:vertical;
+  }
+  .row{display:flex; gap:.5rem; margin-top:.5rem;}
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:.6rem;
+    padding:.6rem .7rem; margin-bottom:.5rem;
+  }
+  .card .meta{font-size:.78rem; color:var(--sub); display:flex; justify-content:space-between; gap:.5rem;}
+  .card p{margin:.35rem 0 0; font-size:.88rem; white-space:pre-wrap;}
+  .empty{color:var(--sub); font-size:.85rem; text-align:center; padding:1.5rem 0;}
+  .icon-btn{background:none; border:none; color:var(--danger); font-size:.78rem; cursor:pointer;}
+  .save-note{margin-top:.5rem;}
+  .hint{font-size:.75rem; color:var(--sub); margin-top:.3rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 Quran Corpus Companion</h1>
+  <button class="pill-btn ghost" id="themeToggle" style="border:1px solid var(--line);">🌓</button>
+</header>
+
+<nav class="tabs">
+  <button data-tool="wordbyword.jsp" class="viewbtn active">Word by Word</button>
+  <button data-tool="translation.jsp" class="viewbtn">Translation</button>
+  <button data-tool="qurandictionary.jsp" class="viewbtn">Dictionary</button>
+  <button data-tool="treebank.jsp" class="viewbtn">Treebank</button>
+  <button id="notesTab">My Notes</button>
+  <button id="bookmarksTab">Bookmarks</button>
+</nav>
+
+<div class="jumpbar">
+  <button class="ghost" id="prevVerseBtn" style="border:1px solid var(--accent); background:transparent; padding:.45rem .6rem;">‹</button>
+  <input type="number" id="chapterInput" min="1" max="114" placeholder="Surah" value="1">
+  <input type="number" id="verseInput" min="1" placeholder="Ayah" value="1">
+  <button class="ghost" id="nextVerseBtn" style="border:1px solid var(--accent); background:transparent; padding:.45rem .6rem;">›</button>
+  <button class="ghost" id="bookmarkBtn" style="border:1px solid var(--accent); background:transparent;">☆ Bookmark</button>
+</div>
+
+<main>
+  <div class="panel" id="launchPanel">
+    <div class="card" style="text-align:center; padding:1rem .8rem;">
+      <div style="font-size:.85rem; color:var(--sub); margin-bottom:.3rem;">Currently set to</div>
+      <div style="font-size:1.4rem; font-weight:600; margin-bottom:.6rem;" id="refBig">1:1</div>
+      <a id="openMain" href="#" target="_blank" rel="noopener" style="display:inline-block; padding:.6rem 1.2rem; border-radius:.6rem; background:var(--accent); color:var(--accent-ink); text-decoration:none; font-weight:600; font-size:.85rem;">Open on corpus.quran.com ↗</a>
+    </div>
+    <div class="row" style="flex-wrap:wrap; justify-content:center; margin-top:.6rem;">
+      <button data-tool="wordbyword.jsp" class="viewbtn pill-btn active" style="background:transparent; color:var(--accent);">Word by Word</button>
+      <button data-tool="translation.jsp" class="viewbtn pill-btn" style="background:transparent; color:var(--accent);">Translation</button>
+      <button data-tool="qurandictionary.jsp" class="viewbtn pill-btn" style="background:transparent; color:var(--accent);">Dictionary</button>
+      <button data-tool="treebank.jsp" class="viewbtn pill-btn" style="background:transparent; color:var(--accent);">Treebank</button>
+    </div>
+
+    <div id="offlineGrammarBlock" style="margin-top:.8rem;">
+      <div style="display:flex; gap:.9rem; justify-content:center; flex-wrap:wrap; font-size:.72rem; color:var(--sub); margin-bottom:.5rem;">
+        <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-verb); margin-right:.3rem;"></span>Verb</span>
+        <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-noun); margin-right:.3rem;"></span>Noun / pronoun</span>
+        <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-particle); margin-right:.3rem;"></span>Particle</span>
+      </div>
+      <div class="hint" style="text-align:center; margin-bottom:.4rem;">Tap any word to see its root and every occurrence of that root.</div>
+      <div id="grammarContent"></div>
+      <div id="wordDetail" style="display:none; margin-top:.5rem;"></div>
+      <div class="hint" id="noGrammarHint" style="text-align:center; display:none;">Offline grammar for this verse isn't added yet — tap Open above to view it on corpus.quran.com. More surahs get added over time.</div>
+    </div>
+
+    <div id="offlineDictionaryBlock" style="margin-top:.8rem; display:none;">
+      <div class="hint" style="text-align:center; margin-bottom:.4rem;">Roots added to this app so far, with the grammar/meaning notes — tap any root for its Quran-wide dictionary entry.</div>
+      <div id="dictionaryContent"></div>
+      <div id="dictWordDetail" style="display:none; margin-top:.5rem;"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="notesPanel" style="display:none;">
+    <h2>Notes for current verse (<span id="notesRef">1:1</span>)</h2>
+    <textarea id="noteText" placeholder="Your own root-word breakdown, reflections, cross-references..."></textarea>
+    <div class="row">
+      <button class="pill-btn save-note" id="saveNoteBtn">Save note</button>
+    </div>
+    <div class="hint">Saved only on this device/browser.</div>
+    <h2 style="margin-top:1.2rem;">All saved notes</h2>
+    <div id="allNotes"></div>
+  </div>
+
+  <div class="panel" id="bookmarksPanel" style="display:none;">
+    <h2>Bookmarked verses</h2>
+    <div id="bookmarkList"></div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const chapterInput = document.getElementById('chapterInput');
+  const verseInput = document.getElementById('verseInput');
+  const openMain = document.getElementById('openMain');
+  const refBig = document.getElementById('refBig');
+  const viewBtns = document.querySelectorAll('.viewbtn');
+  let currentTool = 'wordbyword.jsp';
+
+  function safeGet(key){ try{ return JSON.parse(localStorage.getItem(key) || '{}'); }catch(e){ return {}; } }
+  function safeSet(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+
+  function ref(){ return chapterInput.value + ':' + verseInput.value; }
+
+  function updateFrame(){
+    const c = chapterInput.value || 1, v = verseInput.value || 1;
+    const url = 'https://corpus.quran.com/' + currentTool + '?chapter=' + c + '&verse=' + v;
+    openMain.href = url;
+    refBig.textContent = ref();
+    document.getElementById('notesRef').textContent = ref();
+    loadNoteForCurrent();
+    updateBookmarkStar();
+    const offlineBlock = document.getElementById('offlineGrammarBlock');
+    const dictBlock = document.getElementById('offlineDictionaryBlock');
+    offlineBlock.style.display = 'none';
+    dictBlock.style.display = 'none';
+    if(currentTool === 'wordbyword.jsp'){
+      offlineBlock.style.display = 'block';
+      renderOfflineGrammar();
+    } else if(currentTool === 'qurandictionary.jsp'){
+      dictBlock.style.display = 'block';
+      renderOfflineDictionary();
+    }
+  }
+
+  chapterInput.addEventListener('input', updateFrame);
+  verseInput.addEventListener('input', updateFrame);
+
+  // Verse count per surah (1-114), standard Uthmani mushaf — lets Prev/Next
+  // step through every verse in the whole Quran in sequence, rolling over
+  // between surahs automatically.
+  const SURAH_AYAH_COUNT = [null,7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+
+  function goToVerse(c, v){
+    if(c < 1) c = 1;
+    if(c > 114) c = 114;
+    if(v < 1){
+      c = c - 1 < 1 ? 1 : c - 1;
+      v = SURAH_AYAH_COUNT[c];
+    } else if(v > SURAH_AYAH_COUNT[c]){
+      if(c < 114){ c = c + 1; v = 1; } else { v = SURAH_AYAH_COUNT[c]; }
+    }
+    chapterInput.value = c;
+    verseInput.value = v;
+    updateFrame();
+  }
+  document.getElementById('prevVerseBtn').addEventListener('click', ()=>{
+    goToVerse(+chapterInput.value || 1, (+verseInput.value || 1) - 1);
+  });
+  document.getElementById('nextVerseBtn').addEventListener('click', ()=>{
+    goToVerse(+chapterInput.value || 1, (+verseInput.value || 1) + 1);
+  });
+
+  viewBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      viewBtns.forEach(b=>{ b.classList.remove('active'); b.style.background='transparent'; b.style.color='var(--accent)'; });
+      btn.classList.add('active');
+      btn.style.background='var(--accent)'; btn.style.color='var(--accent-ink)';
+      currentTool = btn.dataset.tool;
+      showMain('launch');
+      updateFrame();
+    });
+  });
+
+  // Tabs: notes / bookmarks
+  const notesTab = document.getElementById('notesTab');
+  const bookmarksTab = document.getElementById('bookmarksTab');
+  const notesPanel = document.getElementById('notesPanel');
+  const bookmarksPanel = document.getElementById('bookmarksPanel');
+
+  const launchPanel = document.getElementById('launchPanel');
+  function showMain(which){
+    launchPanel.style.display = which==='launch' ? 'block' : 'none';
+    notesPanel.style.display = which==='notes' ? 'block' : 'none';
+    bookmarksPanel.style.display = which==='bookmarks' ? 'block' : 'none';
+  }
+
+  notesTab.addEventListener('click', ()=>{ showMain('notes'); renderAllNotes(); });
+  bookmarksTab.addEventListener('click', ()=>{ showMain('bookmarks'); renderBookmarks(); });
+
+  // Offline word-by-word grammar, keyed by surah -> ayah -> words.
+  // Add more surahs/verses here in Quranic order as they're built out.
+  // Original analysis (not copied from corpus.quran.com's dataset).
+  const GRAMMAR_DATA = {
+    1: {
+      1: [
+        {ar:'بِسْمِ', root:'س م و', pos:'Preposition + noun', case:'Genitive', note:'"bi" (with/by) + ism (name); ism is majrūr as object of the preposition.'},
+        {ar:'اللَّهِ', root:'أ ل ه', pos:'Proper noun', case:'Genitive', note:'Muḍāf ilayh (possessive) of ism — "the name of Allah."'},
+        {ar:'الرَّحْمَٰنِ', root:'ر ح م', pos:'Adjective', case:'Genitive', note:'Describes Allah — intensive form on the pattern فَعْلَان.'},
+        {ar:'الرَّحِيمِ', root:'ر ح م', pos:'Adjective', case:'Genitive', note:'Second description, pattern فَعِيل — continuous mercy.'}
+      ],
+      2: [
+        {ar:'الْحَمْدُ', root:'ح م د', pos:'Noun', case:'Nominative', note:'Mubtada (subject) of the sentence — "[all] praise."'},
+        {ar:'لِلَّهِ', root:'أ ل ه', pos:'Preposition + noun', case:'Genitive', note:'"li" (belongs to) + Allah; together forms the khabar (predicate).'},
+        {ar:'رَبِّ', root:'ر ب ب', pos:'Noun', case:'Genitive', note:'Badal (appositive) for Allah, in iḍāfah with what follows — "Lord of."'},
+        {ar:'الْعَالَمِينَ', root:'ع ل م', pos:'Noun (plural)', case:'Genitive', note:'Muḍāf ilayh — "the worlds," sound masculine plural.'}
+      ],
+      3: [
+        {ar:'الرَّحْمَٰنِ', root:'ر ح م', pos:'Adjective', case:'Genitive', note:'Second badal for Allah/al-Rabb.'},
+        {ar:'الرَّحِيمِ', root:'ر ح م', pos:'Adjective', case:'Genitive', note:'Repeats verse 1 for emphasis before the turn to judgment in v.4.'}
+      ],
+      4: [
+        {ar:'مَالِكِ', root:'م ل ك', pos:'Active participle', case:'Genitive', note:'Badal — "Owner/Master of." (Some qirā\'āt read مَٰلِكِ — "King of.")'},
+        {ar:'يَوْمِ', root:'ي و م', pos:'Noun', case:'Genitive', note:'Muḍāf ilayh — "the Day."'},
+        {ar:'الدِّينِ', root:'د ي ن', pos:'Noun', case:'Genitive', note:'Muḍāf ilayh of yawm — "of Judgment/Recompense."'}
+      ],
+      5: [
+        {ar:'إِيَّاكَ', root:'—', pos:'Pronoun', case:'Accusative', note:'Fronted for exclusivity — "You [alone]" — object of the verb that follows.'},
+        {ar:'نَعْبُدُ', root:'ع ب د', pos:'Verb, imperfect', case:'1st person plural', note:'"We worship" — subject is the attached "we."'},
+        {ar:'وَإِيَّاكَ', root:'—', pos:'Conjunction + pronoun', case:'Accusative', note:'"And You [alone]" — repeats the fronting for the second verb.'},
+        {ar:'نَسْتَعِينُ', root:'ع و ن', pos:'Verb, imperfect (Form X)', case:'1st person plural', note:'"We seek help" — istif\'āl form, seeking aid.'}
+      ],
+      6: [
+        {ar:'اهْدِنَا', root:'ه د ي', pos:'Verb, imperative + pronoun', case:'—', note:'"Guide us" — nā is the attached object pronoun.'},
+        {ar:'الصِّرَاطَ', root:'ص ر ط', pos:'Noun', case:'Accusative', note:'Direct object of the verb — "the path."'},
+        {ar:'الْمُسْتَقِيمَ', root:'ق و م', pos:'Adjective (Form X active participle)', case:'Accusative', note:'"The straight" — describes al-ṣirāṭ.'}
+      ],
+      7: [
+        {ar:'صِرَاطَ', root:'ص ر ط', pos:'Noun', case:'Accusative', note:'Badal (restates) "the straight path" from v.6.'},
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'—', note:'"Those who" — begins the relative clause, muḍāf ilayh.'},
+        {ar:'أَنْعَمْتَ', root:'ن ع م', pos:'Verb, perfect', case:'2nd person masc. sing.', note:'"You have favored" — Allah as subject ("You").'},
+        {ar:'عَلَيْهِمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"Upon them" — completes the relative clause.'},
+        {ar:'غَيْرِ', root:'غ ي ر', pos:'Noun', case:'Genitive', note:'Badal — "not [the path of]"; begins the exclusion.'},
+        {ar:'الْمَغْضُوبِ', root:'غ ض ب', pos:'Passive participle', case:'Genitive', note:'Muḍāf ilayh — "those [upon whom wrath] has fallen."'},
+        {ar:'عَلَيْهِمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"Upon them," second occurrence.'},
+        {ar:'وَلَا الضَّالِّينَ', root:'ض ل ل', pos:'Conjunction + negation + active participle', case:'Genitive', note:'"Nor those who are astray" — conjoined to al-maghḍūb.'}
+      ]
+    },
+    2: {
+      1: [
+        {ar:'الم', root:'—', pos:'Quranic initials (disconnected letters)', case:'—', note:'Alif-Lām-Mīm — one of the mysterious opening letter-sets; traditionally left grammatically unparsed.'}
+      ],
+      2: [
+        {ar:'ذَٰلِكَ', root:'—', pos:'Demonstrative pronoun', case:'Nominative', note:'"That" — mubtada (subject); points to the Qur\'an as something exalted, spoken of from a distance.'},
+        {ar:'الْكِتَابُ', root:'ك ت ب', pos:'Noun', case:'Nominative', note:'Khabar (predicate) of ذلك — "the Book."'},
+        {ar:'لَا', root:'—', pos:'Negation particle', case:'—', note:'Negates the whole category that follows (لا النافية للجنس) — "no ... at all."'},
+        {ar:'رَيْبَ', root:'ر ي ب', pos:'Noun', case:'Accusative', note:'The categorically-negated noun — "[not any] doubt."'},
+        {ar:'فِيهِ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"In it" — completes the negated sentence.'},
+        {ar:'هُدًى', root:'ه د ي', pos:'Noun', case:'Nominative', note:'Second khabar for ذلك — "[it is] guidance," indefinite for emphasis.'},
+        {ar:'لِّلْمُتَّقِينَ', root:'و ق ي', pos:'Preposition + active participle (Form VIII)', case:'Genitive', note:'"For the God-conscious" — from ittaqā, to guard oneself.'}
+      ],
+      3: [
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'Nominative', note:'"Those who" — badal (description) of al-muttaqīn.'},
+        {ar:'يُؤْمِنُونَ', root:'أ م ن', pos:'Verb, imperfect (Form IV)', case:'3rd person masc. plural', note:'"They believe" — from āmana, to have faith/feel secure.'},
+        {ar:'بِالْغَيْبِ', root:'غ ي ب', pos:'Preposition + noun', case:'Genitive', note:'"In the unseen" — object of belief.'},
+        {ar:'وَيُقِيمُونَ', root:'ق و م', pos:'Conjunction + verb, imperfect (Form IV)', case:'3rd person masc. plural', note:'"And they establish" — from aqāma, to set upright/maintain.'},
+        {ar:'الصَّلَاةَ', root:'ص ل و', pos:'Noun', case:'Accusative', note:'Direct object — "the prayer."'},
+        {ar:'وَمِمَّا', root:'—', pos:'Conjunction + preposition + relative pronoun', case:'—', note:'"And from what" — min + mā fused.'},
+        {ar:'رَزَقْنَاهُمْ', root:'ر ز ق', pos:'Verb, perfect + pronoun', case:'1st person plural', note:'"We have provided them" — nā is the subject, hum the object.'},
+        {ar:'يُنفِقُونَ', root:'ن ف ق', pos:'Verb, imperfect (Form IV)', case:'3rd person masc. plural', note:'"They spend" — completes "from what We provided them, they spend."'}
+      ],
+      4: [
+        {ar:'وَالَّذِينَ', root:'—', pos:'Conjunction + relative pronoun', case:'Nominative', note:'"And those who" — continues the description of al-muttaqīn.'},
+        {ar:'يُؤْمِنُونَ', root:'أ م ن', pos:'Verb, imperfect (Form IV)', case:'3rd person masc. plural', note:'"They believe" — second mention, now on revelation.'},
+        {ar:'بِمَا', root:'—', pos:'Preposition + relative pronoun', case:'—', note:'"In what" — object of belief introduced.'},
+        {ar:'أُنزِلَ', root:'ن ز ل', pos:'Verb, perfect (passive, Form IV)', case:'3rd person masc. sing.', note:'"Was sent down" — to you (the Prophet ﷺ).'},
+        {ar:'إِلَيْكَ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"To you."'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + relative pronoun', case:'—', note:'"And what" — a second object of belief.'},
+        {ar:'أُنزِلَ', root:'ن ز ل', pos:'Verb, perfect (passive, Form IV)', case:'3rd person masc. sing.', note:'"Was sent down" — to earlier prophets.'},
+        {ar:'مِن قَبْلِكَ', root:'ق ب ل', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"Before you."'},
+        {ar:'وَبِالْآخِرَةِ', root:'أ خ ر', pos:'Conjunction + preposition + noun', case:'Genitive', note:'"And in the Hereafter."'},
+        {ar:'هُمْ', root:'—', pos:'Pronoun', case:'Nominative', note:'"They" — mubtada, fronted for emphasis.'},
+        {ar:'يُوقِنُونَ', root:'ي ق ن', pos:'Verb, imperfect (Form IV)', case:'3rd person masc. plural', note:'"Are certain" — khabar; certainty, stronger than belief alone.'}
+      ],
+      5: [
+        {ar:'أُولَٰئِكَ', root:'—', pos:'Demonstrative pronoun (plural)', case:'Nominative', note:'"Those" — mubtada, referring back to al-muttaqīn.'},
+        {ar:'عَلَىٰ', root:'—', pos:'Preposition', case:'—', note:'"Upon."'},
+        {ar:'هُدًى', root:'ه د ي', pos:'Noun', case:'Genitive', note:'Object of the preposition — "guidance," repeated from v.2, now attained.'},
+        {ar:'مِّن رَّبِّهِمْ', root:'ر ب ب', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"From their Lord."'},
+        {ar:'وَأُولَٰئِكَ', root:'—', pos:'Conjunction + demonstrative pronoun', case:'Nominative', note:'"And those" — repeats the subject for a second predicate.'},
+        {ar:'هُمُ', root:'—', pos:'Pronoun (separating/faṣl)', case:'—', note:'Emphasizes exclusivity — "they [and none other]."'},
+        {ar:'الْمُفْلِحُونَ', root:'ف ل ح', pos:'Noun (active participle, Form IV)', case:'Nominative', note:'Khabar — "the successful ones," from aflaḥa, to truly prosper.'}
+      ],
+      6: [
+        {ar:'إِنَّ', root:'—', pos:'Accusative particle', case:'—', note:'"Indeed" — introduces an emphatic nominal sentence.'},
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'Accusative', note:'"Those who" — the subject (ism) of inna.'},
+        {ar:'كَفَرُوا', root:'ك ف ر', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"Disbelieved" — kafara, to cover over/reject the truth.'},
+        {ar:'سَوَاءٌ', root:'س و ي', pos:'Noun', case:'Nominative', note:'Khabar (predicate) of inna — "[it is] the same."'},
+        {ar:'عَلَيْهِمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"Upon/to them."'},
+        {ar:'أَأَنذَرْتَهُمْ', root:'ن ذ ر', pos:'Interrogative + verb, perfect (Form IV) + pronoun', case:'2nd person masc. sing.', note:'"Whether you warn them" — first half of the equal alternatives.'},
+        {ar:'أَمْ', root:'—', pos:'Coordinating conjunction', case:'—', note:'"Or" — joins the two alternatives.'},
+        {ar:'لَمْ', root:'—', pos:'Negative particle', case:'—', note:'Puts the following verb in the jussive — "did not."'},
+        {ar:'تُنذِرْهُمْ', root:'ن ذ ر', pos:'Verb, imperfect jussive (Form IV) + pronoun', case:'2nd person masc. sing.', note:'"[or] you do not warn them" — second alternative.'},
+        {ar:'لَا', root:'—', pos:'Negation particle', case:'—', note:'Negates the main verb that follows.'},
+        {ar:'يُؤْمِنُونَ', root:'أ م ن', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"They will [not] believe" — the outcome either way.'}
+      ],
+      7: [
+        {ar:'خَتَمَ', root:'خ ت م', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Has sealed" — khatama, to seal/stamp closed.'},
+        {ar:'اللَّهُ', root:'أ ل ه', pos:'Proper noun', case:'Nominative', note:'Subject of the verb.'},
+        {ar:'عَلَىٰ', root:'—', pos:'Preposition', case:'—', note:'"Upon."'},
+        {ar:'قُلُوبِهِمْ', root:'ق ل ب', pos:'Noun + pronoun', case:'Genitive', note:'"Their hearts."'},
+        {ar:'وَعَلَىٰ', root:'—', pos:'Conjunction + preposition', case:'—', note:'"And upon."'},
+        {ar:'سَمْعِهِمْ', root:'س م ع', pos:'Noun + pronoun', case:'Genitive', note:'"Their hearing."'},
+        {ar:'وَعَلَىٰ', root:'—', pos:'Conjunction + preposition', case:'—', note:'"And upon."'},
+        {ar:'أَبْصَارِهِمْ', root:'ب ص ر', pos:'Noun + pronoun', case:'Genitive', note:'"Their sight" — object of the third عَلَىٰ.'},
+        {ar:'غِشَاوَةٌ', root:'غ ش و', pos:'Noun', case:'Nominative', note:'Delayed subject — "[is] a covering" (mubtada muʾakhkhar).'},
+        {ar:'وَلَهُمْ', root:'—', pos:'Conjunction + preposition + pronoun', case:'—', note:'"And for them [is]" — begins a new nominal sentence.'},
+        {ar:'عَذَابٌ', root:'ع ذ ب', pos:'Noun', case:'Nominative', note:'Delayed subject — "a punishment."'},
+        {ar:'عَظِيمٌ', root:'ع ظ م', pos:'Adjective', case:'Nominative', note:'"Great" — describes ʿadhāb.'}
+      ],
+      8: [
+        {ar:'وَمِنَ', root:'—', pos:'Conjunction + preposition', case:'—', note:'"And among."'},
+        {ar:'النَّاسِ', root:'ن و س', pos:'Noun (plural)', case:'Genitive', note:'"The people" — object of the preposition.'},
+        {ar:'مَن', root:'—', pos:'Relative/indefinite pronoun', case:'Nominative', note:'"[There is] who/some who" — mubtada, introduces the hypocrites.'},
+        {ar:'يَقُولُ', root:'ق و ل', pos:'Verb, imperfect', case:'3rd person masc. sing.', note:'"Says" — khabar of man.'},
+        {ar:'آمَنَّا', root:'أ م ن', pos:'Verb, perfect (Form IV)', case:'1st person plural', note:'"We believe" — the claim quoted.'},
+        {ar:'بِاللَّهِ', root:'أ ل ه', pos:'Preposition + proper noun', case:'Genitive', note:'"In Allah."'},
+        {ar:'وَبِالْيَوْمِ', root:'ي و م', pos:'Conjunction + preposition + noun', case:'Genitive', note:'"And in the Day."'},
+        {ar:'الْآخِرِ', root:'أ خ ر', pos:'Adjective', case:'Genitive', note:'"The Last" — describes al-yawm.'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"But not" — contradicts the claim just quoted.'},
+        {ar:'هُم', root:'—', pos:'Pronoun', case:'Nominative', note:'"They" — mubtada.'},
+        {ar:'بِمُؤْمِنِينَ', root:'أ م ن', pos:'Preposition (emphatic) + noun (active participle)', case:'Genitive (meaning: accusative)', note:'"[are not] believers" — the bā\' here reinforces the negation.'}
+      ],
+      9: [
+        {ar:'يُخَادِعُونَ', root:'خ د ع', pos:'Verb, imperfect (Form III)', case:'3rd person masc. plural', note:'"They seek to deceive" — attempted deception, mutual/effort form.'},
+        {ar:'اللَّهَ', root:'أ ل ه', pos:'Proper noun', case:'Accusative', note:'Object — "Allah."'},
+        {ar:'وَالَّذِينَ', root:'—', pos:'Conjunction + relative pronoun', case:'Accusative', note:'"And those who" — second object, conjoined.'},
+        {ar:'آمَنُوا', root:'أ م ن', pos:'Verb, perfect (Form IV)', case:'3rd person masc. plural', note:'"Believed" — the believers, second target of the deceit.'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'يَخْدَعُونَ', root:'خ د ع', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"[Do] they [really] deceive" — plain deceive, without the Form III effort-sense.'},
+        {ar:'إِلَّا', root:'—', pos:'Exception particle', case:'—', note:'"Except."'},
+        {ar:'أَنفُسَهُمْ', root:'ن ف س', pos:'Noun + pronoun', case:'Accusative', note:'Excepted object — "themselves."'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'يَشْعُرُونَ', root:'ش ع ر', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"They perceive [it]" — unaware of the self-harm they cause.'}
+      ]
+    },
+    112: {
+      1: [
+        {ar:'قُلْ', root:'ق و ل', pos:'Verb, imperative', case:'2nd person masc. sing.', note:'"Say" — addressed to the Prophet ﷺ, to be conveyed onward.'},
+        {ar:'هُوَ', root:'—', pos:'Pronoun', case:'Nominative', note:'"He" — mubtada (subject).'},
+        {ar:'اللَّهُ', root:'أ ل ه', pos:'Proper noun', case:'Nominative', note:'Badal/khabar — identifies the pronoun as Allah.'},
+        {ar:'أَحَدٌ', root:'أ ح د', pos:'Noun', case:'Nominative', note:'Second khabar — "One," absolute oneness (aḥad, not merely wāḥid).'}
+      ],
+      2: [
+        {ar:'اللَّهُ', root:'أ ل ه', pos:'Proper noun', case:'Nominative', note:'Mubtada of a new sentence.'},
+        {ar:'الصَّمَدُ', root:'ص م د', pos:'Noun', case:'Nominative', note:'Khabar — "the Self-Sufficient Master," the One all creation depends on while He depends on none.'}
+      ],
+      3: [
+        {ar:'لَمْ', root:'—', pos:'Negation particle', case:'—', note:'Puts the verb in the jussive — negates the past/present.'},
+        {ar:'يَلِدْ', root:'و ل د', pos:'Verb, imperfect jussive', case:'3rd person masc. sing.', note:'"He begets [not]" — no offspring proceeds from Him.'},
+        {ar:'وَلَمْ', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And ... not."'},
+        {ar:'يُولَدْ', root:'و ل د', pos:'Verb, imperfect jussive (passive)', case:'3rd person masc. sing.', note:'"[nor] is He begotten" — He has no origin.'}
+      ],
+      4: [
+        {ar:'وَلَمْ', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And ... not."'},
+        {ar:'يَكُن', root:'ك و ن', pos:'Verb, imperfect jussive (kāna)', case:'3rd person masc. sing.', note:'"There is [not]" — existential/copula verb.'},
+        {ar:'لَّهُ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"For Him" — khabar of kāna.'},
+        {ar:'كُفُوًا', root:'ك ف أ', pos:'Noun', case:'Accusative', note:'Second khabar — "any equal/comparable one."'},
+        {ar:'أَحَدٌ', root:'أ ح د', pos:'Noun', case:'Nominative', note:'Subject (ism) of kāna — "anyone" — closes the sūrah by returning to aḥad from v.1.'}
+      ]
+    },
+    108: {
+      1: [
+        {ar:'إِنَّا', root:'—', pos:'Accusative particle + pronoun', case:'—', note:'"Indeed We" — emphatic opening.'},
+        {ar:'أَعْطَيْنَاكَ', root:'ع ط و', pos:'Verb, perfect (Form IV) + pronouns', case:'1st person plural', note:'"We have given you" — nā (We, subject) + ka (you, object).'},
+        {ar:'الْكَوْثَرَ', root:'ك ث ر', pos:'Noun', case:'Accusative', note:'Object — "al-Kawthar," abundance/a river in Paradise, from kathrah (abundance).'}
+      ],
+      2: [
+        {ar:'فَصَلِّ', root:'ص ل و', pos:'Conjunction + verb, imperative', case:'2nd person masc. sing.', note:'"So pray" — response to the gift just mentioned.'},
+        {ar:'لِرَبِّكَ', root:'ر ب ب', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"To your Lord" — prayer directed to Him alone.'},
+        {ar:'وَانْحَرْ', root:'ن ح ر', pos:'Conjunction + verb, imperative', case:'2nd person masc. sing.', note:'"And sacrifice" — offer the sacrificial animal.'}
+      ],
+      3: [
+        {ar:'إِنَّ', root:'—', pos:'Accusative particle', case:'—', note:'"Indeed" — emphatic.'},
+        {ar:'شَانِئَكَ', root:'ش ن أ', pos:'Noun (active participle) + pronoun', case:'Accusative', note:'Subject (ism) of inna — "your hater/enemy."'},
+        {ar:'هُوَ', root:'—', pos:'Pronoun (separating/faṣl)', case:'—', note:'Emphasizes the predicate that follows.'},
+        {ar:'الْأَبْتَرُ', root:'ب ت ر', pos:'Noun/adjective', case:'Nominative', note:'Khabar of inna — "the one cut off," without lasting legacy.'}
+      ]
+    }
+  };
+
+  // Approximate 3-way ism/fi'l/harf color scheme corpus.quran.com uses.
+  function posCategory(pos){
+    if(/Verb/.test(pos)) return 'verb';
+    if(/Noun|Pronoun|Participle|Adjective|Proper noun|Relative|Demonstrative/.test(pos)) return 'noun';
+    return 'particle';
+  }
+  function posColor(pos){
+    const cat = posCategory(pos);
+    return cat==='verb' ? 'var(--pos-verb)' : cat==='noun' ? 'var(--pos-noun)' : 'var(--pos-particle)';
+  }
+
+  // Rough Arabic -> Buckwalter transliteration, just enough for root letters,
+  // so a root can be handed to corpus.quran.com's own dictionary search
+  // (their qurandictionary.jsp?q= tool) for the true, complete Quran-wide list.
+  const BUCKWALTER = {'ا':'A','ب':'b','ت':'t','ث':'v','ج':'j','ح':'H','خ':'x','د':'d','ذ':'*','ر':'r','ز':'z','س':'s','ش':'$','ص':'S','ض':'D','ط':'T','ظ':'Z','ع':'E','غ':'g','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'w','ي':'y','ء':'\'','أ':'>','إ':'<','آ':'|','ة':'p','ى':'Y'};
+  function toBuckwalter(root){
+    return root.replace(/\s+/g,'').split('').map(ch=>BUCKWALTER[ch]||'').join('');
+  }
+
+  // Find every word sharing this root within the offline data we currently have.
+  function findLocalOccurrences(root){
+    const out = [];
+    Object.keys(GRAMMAR_DATA).forEach(s=>{
+      Object.keys(GRAMMAR_DATA[s]).forEach(a=>{
+        GRAMMAR_DATA[s][a].forEach(w=>{
+          if(w.root === root) out.push({ref: s+':'+a, ar: w.ar});
+        });
+      });
+    });
+    return out;
+  }
+
+  function showWordDetail(root, ar){
+    const el = document.getElementById('wordDetail');
+    if(!root || root === '—'){
+      el.innerHTML = `<div class="card"><div class="meta"><strong>${ar}</strong></div><p>This word is a grammatical particle/pronoun with no triliteral root to search by.</p></div>`;
+      el.style.display = 'block';
+      return;
+    }
+    const local = findLocalOccurrences(root);
+    const bw = toBuckwalter(root);
+    const dictUrl = 'https://corpus.quran.com/qurandictionary.jsp?q=' + encodeURIComponent(bw);
+    el.innerHTML = `
+      <div class="card">
+        <div class="meta"><strong>Root: ${root}</strong><span>${ar}</span></div>
+        <p style="margin-top:.5rem;">Occurrences in the offline data added so far (${local.length}):</p>
+        <div style="display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.4rem;">
+          ${local.map(o=>`<button class="icon-btn" style="border:1px solid var(--line); border-radius:.4rem; padding:.25rem .5rem; color:var(--accent);" data-jump="${o.ref}">${o.ref} ${o.ar}</button>`).join('')}
+        </div>
+        <a href="${dictUrl}" target="_blank" rel="noopener" style="display:inline-block; margin-top:.7rem; padding:.5rem .9rem; border-radius:.5rem; background:var(--accent); color:var(--accent-ink); text-decoration:none; font-size:.82rem;">See every occurrence in the Quran ↗</a>
+        <div class="hint" style="margin-top:.4rem;">Opens corpus.quran.com's own Dictionary search for this root — that's the complete, whole-Quran list; what's above is just what's in this app so far.</div>
+      </div>`;
+    el.style.display = 'block';
+    el.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click', ()=>{
+      const [c,v] = b.dataset.jump.split(':');
+      chapterInput.value=c; verseInput.value=v; updateFrame();
+      el.scrollIntoView({behavior:'smooth'});
+    }));
+  }
+
+  function renderOfflineGrammar(){
+    const c = chapterInput.value || 1, v = verseInput.value || 1;
+    const words = (GRAMMAR_DATA[c] && GRAMMAR_DATA[c][v]) || null;
+    const grammarContent = document.getElementById('grammarContent');
+    const noGrammarHint = document.getElementById('noGrammarHint');
+    document.getElementById('wordDetail').style.display = 'none';
+    if(!words){
+      grammarContent.innerHTML = '';
+      noGrammarHint.style.display = 'block';
+      return;
+    }
+    noGrammarHint.style.display = 'none';
+    grammarContent.innerHTML = `
+      <div class="card">
+        ${words.map((w,i) => `
+          <div class="wordRow" data-idx="${i}" style="margin-top:.5rem; padding-top:.5rem; border-top:1px solid var(--line); cursor:pointer;">
+            <div style="font-size:1.2rem; direction:rtl; text-align:right; color:${posColor(w.pos)}; font-weight:600;">${w.ar}</div>
+            <div style="font-size:.8rem; color:var(--sub); margin-top:.15rem;">
+              <span style="display:inline-block; width:.55rem; height:.55rem; border-radius:50%; background:${posColor(w.pos)}; margin-right:.3rem;"></span>${w.pos}${w.case && w.case!=='—' ? ' · ' + w.case : ''}${w.root && w.root!=='—' ? ' · root ' + w.root : ''}
+            </div>
+            <div style="font-size:.85rem; margin-top:.25rem;">${w.note}</div>
+          </div>
+        `).join('')}
+      </div>`;
+    grammarContent.querySelectorAll('.wordRow').forEach(row=>{
+      row.addEventListener('click', ()=>{
+        const w = words[+row.dataset.idx];
+        showWordDetail(w.root, w.ar);
+      });
+    });
+  }
+
+  // Root meanings — a compact offline lexicon covering the roots added so far
+  // (grows alongside GRAMMAR_DATA as more surahs are added). Brief classical
+  // glosses, not a copy of corpus.quran.com's own dictionary entries.
+  const ROOT_MEANINGS = {
+    'س م و': 'To be elevated, exalted; ism (name) marks and elevates what it names above the unnamed.',
+    'أ ل ه': 'To worship, be devoted to; Allah — the One deserving worship, the proper name of God.',
+    'ر ح م': 'Mercy, tenderness; the same root gives raḥim (womb) — mercy as a nurturing bond.',
+    'ح م د': 'To praise, commend; ḥamd is praise freely given for what is inherently praiseworthy.',
+    'ر ب ب': 'To nurture, sustain, bring to completion by stages; Rabb — Lord, Sustainer.',
+    'ع ل م': 'To know, be aware; ʿālam (world) is that through which the Creator is known.',
+    'م ل ك': 'To possess, hold dominion over; mālik — owner, master.',
+    'ي و م': 'Day — a bounded stretch of time, often specifically of reckoning.',
+    'د ي ن': 'Recompense, judgment, and also the debt/obligation owed — dīn spans both religion and requital.',
+    'ع ب د': 'To serve, worship; ʿabd — servant/slave, one who submits.',
+    'ع و ن': 'To help, aid; istiʿānah — actively seeking help.',
+    'ه د ي': 'To guide, lead gently to a goal; hudā — right guidance.',
+    'ص ر ط': 'A clear, wide path — borrowed into Arabic, then naturalized; ṣirāṭ, the road walked without confusion.',
+    'ق و م': 'To stand, rise, be upright; mustaqīm — kept straight, without deviation.',
+    'غ ي ر': 'Otherness, difference; ghayr — other than, not.',
+    'غ ض ب': 'To become angry; ghaḍab — wrath, displeasure.',
+    'ض ل ل': 'To lose the way, go astray; ḍalāl — misguidance.',
+    'ن ع م': 'To favor, bless; niʿmah — a blessing/favor bestowed.',
+    'ك ت ب': 'To write, prescribe, decree; kitāb — a Book, something bound and set down.',
+    'ر ي ب': 'Doubt, unsettling suspicion; rayb — doubt that disturbs the heart.',
+    'و ق ي': 'To guard, shield, protect; ittiqāʾ — guarding oneself against wrong (taqwā).',
+    'أ م ن': 'To be secure, trust; īmān — faith, a settled trust and inner security.',
+    'غ ي ب': 'To be hidden, absent from the senses; ghayb — the unseen.',
+    'ص ل و': 'Root of ṣalāh (prayer) — connection/turning toward, though its precise etymology is debated.',
+    'ر ز ق': 'To provide, sustain; rizq — provision, sustenance.',
+    'ن ف ق': 'To spend, deplete a stock; infāq — spending, giving out.',
+    'ن ز ل': 'To descend, come down; anzala — to send down (revelation).',
+    'ق ب ل': 'To be in front, precede; qabl — before.',
+    'أ خ ر': 'To come after, be delayed; al-ākhirah — the Hereafter, what comes last.',
+    'ي ق ن': 'To be certain; yaqīn — sure, settled certainty.',
+    'ف ل ح': 'To split/cultivate soil, hence to succeed by effort; falāḥ — true success/prosperity.',
+    'ك ف ر': 'To cover, conceal; kufr — disbelief, covering over the truth one knows.',
+    'س و ي': 'To be equal, level; sawāʾ — the same, equal.',
+    'ن ذ ر': 'To warn, forewarn; inzār — warning of consequence.',
+    'خ ت م': 'To seal, stamp shut; khatm — a seal placed so nothing more enters or leaves.',
+    'ق ل ب': 'To turn/overturn; qalb — the heart, that which turns (in feeling and thought).',
+    'س م ع': 'To hear; samʿ — hearing.',
+    'ب ص ر': 'To see; baṣar — sight, vision.',
+    'غ ش و': 'To cover, envelop; ghishāwah — a covering/veil.',
+    'ع ذ ب': 'To be sweet, or (as a separate sense) to punish; ʿadhāb — punishment, torment.',
+    'ع ظ م': 'To be great, mighty; ʿaẓīm — great, tremendous.',
+    'ق و ل': 'To say, speak; qawl — speech, an utterance.',
+    'أ ح د': 'Oneness, absolute unity; aḥad — One, in a sense of indivisible singularity (distinct from wāḥid, numerical one).',
+    'ص م د': 'To go to for need, rely on; ṣamad — the Self-Sufficient Master everyone turns to, who turns to none.',
+    'و ل د': 'To give birth, beget; walad — offspring.',
+    'ك و ن': 'To be, exist, come into being; kawn — existence/being.',
+    'ك ف أ': 'To be equal, comparable in rank; kufuʾ — an equal/match.',
+    'ن و س': 'People, mankind; al-nās — a collective root for human beings (related to socializing/moving together).',
+    'خ د ع': 'To deceive, deceive; khidāʿ/mukhādaʿah — deception, trickery.',
+    'ن ف س': 'Self, soul, breath; nafs — the self.',
+    'ش ع ر': 'To perceive, sense, be aware; shuʿūr — awareness, perception.',
+    'ع ط و': 'To give; ʿaṭāʾ — a gift, giving.',
+    'ك ث ر': 'To be many, abundant; kathrah — abundance.',
+    'ن ح ر': 'To sacrifice (an animal), or the upper chest; naḥr — the act of sacrificial slaughter.',
+    'ش ن أ': 'To hate intensely; shanaʾān — intense hatred.',
+    'ب ت ر': 'To cut off, sever; abtar — cut off, without lasting continuation/legacy.'
+  };
+
+  function collectAllRoots(){
+    const seen = {};
+    Object.keys(GRAMMAR_DATA).forEach(s=>{
+      Object.keys(GRAMMAR_DATA[s]).forEach(a=>{
+        GRAMMAR_DATA[s][a].forEach(w=>{
+          if(w.root && w.root !== '—') seen[w.root] = true;
+        });
+      });
+    });
+    return Object.keys(seen);
+  }
+
+  function showDictDetail(root){
+    const el = document.getElementById('dictWordDetail');
+    const local = findLocalOccurrences(root);
+    const bw = toBuckwalter(root);
+    const dictUrl = 'https://corpus.quran.com/qurandictionary.jsp?q=' + encodeURIComponent(bw);
+    el.innerHTML = `
+      <div class="card">
+        <div class="meta"><strong>Root: ${root}</strong></div>
+        <p style="margin-top:.4rem;">${ROOT_MEANINGS[root] || 'Meaning note not added yet for this root.'}</p>
+        <p style="margin-top:.5rem;">Occurrences in the offline data added so far (${local.length}):</p>
+        <div style="display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.4rem;">
+          ${local.map(o=>`<button class="icon-btn" style="border:1px solid var(--line); border-radius:.4rem; padding:.25rem .5rem; color:var(--accent);" data-jump="${o.ref}">${o.ref} ${o.ar}</button>`).join('')}
+        </div>
+        <a href="${dictUrl}" target="_blank" rel="noopener" style="display:inline-block; margin-top:.7rem; padding:.5rem .9rem; border-radius:.5rem; background:var(--accent); color:var(--accent-ink); text-decoration:none; font-size:.82rem;">Full corpus.quran.com dictionary entry ↗</a>
+        <div class="hint" style="margin-top:.4rem;">That opens their complete entry — every form, every occurrence, classical citations — this app only holds a short gloss and what's already been added.</div>
+      </div>`;
+    el.style.display = 'block';
+    el.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click', ()=>{
+      const [c,v] = b.dataset.jump.split(':');
+      chapterInput.value=c; verseInput.value=v;
+      currentTool = 'wordbyword.jsp';
+      viewBtns.forEach(bt=>{
+        const isWbw = bt.dataset.tool==='wordbyword.jsp';
+        bt.classList.toggle('active', isWbw);
+        bt.style.background = isWbw ? 'var(--accent)' : 'transparent';
+        bt.style.color = isWbw ? 'var(--accent-ink)' : 'var(--accent)';
+      });
+      updateFrame();
+    }));
+  }
+
+  function renderOfflineDictionary(){
+    const roots = collectAllRoots();
+    const el = document.getElementById('dictionaryContent');
+    document.getElementById('dictWordDetail').style.display = 'none';
+    el.innerHTML = `<div class="card">
+      ${roots.map(r => `
+        <div class="rootRow" data-root="${r}" style="margin-top:.5rem; padding-top:.5rem; border-top:1px solid var(--line); cursor:pointer;">
+          <div style="font-size:1.15rem; direction:rtl; text-align:right; color:var(--pos-noun); font-weight:600;">${r}</div>
+          <div style="font-size:.83rem; margin-top:.2rem;">${(ROOT_MEANINGS[r]||'').split(';')[0]}</div>
+        </div>
+      `).join('')}
+    </div>`;
+    el.querySelectorAll('.rootRow').forEach(row=>{
+      row.addEventListener('click', ()=> showDictDetail(row.dataset.root));
+    });
+  }
+
+  // Notes
+  function loadNoteForCurrent(){
+    const notes = safeGet('qc_notes');
+    document.getElementById('noteText').value = notes[ref()] || '';
+  }
+  document.getElementById('saveNoteBtn').addEventListener('click', ()=>{
+    const notes = safeGet('qc_notes');
+    const text = document.getElementById('noteText').value.trim();
+    if(text){ notes[ref()] = text; } else { delete notes[ref()]; }
+    safeSet('qc_notes', notes);
+    renderAllNotes();
+  });
+  function renderAllNotes(){
+    const notes = safeGet('qc_notes');
+    const keys = Object.keys(notes);
+    const el = document.getElementById('allNotes');
+    if(keys.length===0){ el.innerHTML = '<div class="empty">No notes saved yet.</div>'; return; }
+    el.innerHTML = keys.sort().map(k=>`
+      <div class="card">
+        <div class="meta"><strong>${k}</strong>
+          <span>
+            <button class="icon-btn" data-goto="${k}">Open</button>
+            <button class="icon-btn" data-del="${k}">Delete</button>
+          </span>
+        </div>
+        <p>${(notes[k]||'').replace(/</g,'&lt;')}</p>
+      </div>`).join('');
+    el.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click', ()=>{
+      const [c,v] = b.dataset.goto.split(':');
+      chapterInput.value=c; verseInput.value=v; showMain('launch'); updateFrame();
+    }));
+    el.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click', ()=>{
+      const notes = safeGet('qc_notes'); delete notes[b.dataset.del]; safeSet('qc_notes', notes); renderAllNotes();
+      if(b.dataset.del===ref()) document.getElementById('noteText').value='';
+    }));
+  }
+
+  // Bookmarks
+  const bookmarkBtn = document.getElementById('bookmarkBtn');
+  function updateBookmarkStar(){
+    const bms = safeGet('qc_bookmarks');
+    bookmarkBtn.textContent = bms[ref()] ? '★ Bookmarked' : '☆ Bookmark';
+  }
+  bookmarkBtn.addEventListener('click', ()=>{
+    const bms = safeGet('qc_bookmarks');
+    if(bms[ref()]){
+      delete bms[ref()];
+      safeSet('qc_bookmarks', bms);
+      updateBookmarkStar();
+      return;
+    }
+    let text = '';
+    try{
+      text = window.prompt('Bookmarking ' + ref() + '.\n\nOptional: paste the verse text/translation from the open tab so it shows here later (leave blank to skip).', '') || '';
+    }catch(e){}
+    bms[ref()] = { ts: Date.now(), text: text.trim() };
+    safeSet('qc_bookmarks', bms);
+    updateBookmarkStar();
+  });
+  function renderBookmarks(){
+    const bms = safeGet('qc_bookmarks');
+    const keys = Object.keys(bms).sort((a,b)=> (bms[b].ts||0) - (bms[a].ts||0));
+    const el = document.getElementById('bookmarkList');
+    if(keys.length===0){ el.innerHTML = '<div class="empty">No bookmarks yet. Tap ☆ Bookmark while viewing a verse.</div>'; return; }
+    el.innerHTML = keys.map(k=>{
+      const entry = bms[k] || {};
+      const body = entry.text
+        ? `<p>${entry.text.replace(/</g,'&lt;')}</p>`
+        : `<p class="hint" style="margin:.35rem 0 0;">No verse text saved — tap Open to view it.</p>`;
+      return `
+      <div class="card">
+        <div class="meta"><strong>${k}</strong>
+          <span>
+            <button class="icon-btn" style="color:var(--accent);" data-goto2="${k}">Open</button>
+            <button class="icon-btn" data-unbm="${k}">Remove</button>
+          </span>
+        </div>
+        ${body}
+      </div>`;
+    }).join('');
+    el.querySelectorAll('[data-goto2]').forEach(b=>b.addEventListener('click', ()=>{
+      const [c,v] = b.dataset.goto2.split(':');
+      chapterInput.value=c; verseInput.value=v; showMain('launch'); updateFrame();
+    }));
+    el.querySelectorAll('[data-unbm]').forEach(b=>b.addEventListener('click', ()=>{
+      const bms = safeGet('qc_bookmarks'); delete bms[b.dataset.unbm]; safeSet('qc_bookmarks', bms); renderBookmarks(); updateBookmarkStar();
+    }));
+  }
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', ()=>{
+    const cur = document.documentElement.getAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', cur==='dark' ? 'light' : 'dark');
+  });
+
+  updateFrame();
+})();
+</script>
+</body>
+</html>
