@@ -11,7 +11,7 @@
   :root{
     --bg:#f6f3ec; --panel:#ffffff; --ink:#22261f; --sub:#6b6a5d;
     --accent:#3f6b4f; --accent-ink:#ffffff; --line:#e2ddcf; --danger:#b3492f;
-    --pos-verb:#2f8f5b; --pos-noun:#b8375e; --pos-particle:#b6862c;
+    --pos-verb:#2f8f5b; --pos-noun:#2f5fd0; --pos-particle:#d9540b;
     box-sizing:border-box;
     padding-top:env(safe-area-inset-top,0px);
     padding-bottom:env(safe-area-inset-bottom,0px);
@@ -20,13 +20,13 @@
     :root:not([data-theme="light"]){
       --bg:#1b1d17; --panel:#242620; --ink:#eee9dc; --sub:#a7a493;
       --accent:#7fae8d; --accent-ink:#12140f; --line:#33352b;
-      --pos-verb:#5fbf8a; --pos-noun:#e17b9a; --pos-particle:#dcb15a;
+      --pos-verb:#5fbf8a; --pos-noun:#7ea2ff; --pos-particle:#ff9a4d;
     }
   }
   :root[data-theme="dark"]{
     --bg:#1b1d17; --panel:#242620; --ink:#eee9dc; --sub:#a7a493;
     --accent:#7fae8d; --accent-ink:#12140f; --line:#33352b;
-    --pos-verb:#5fbf8a; --pos-noun:#e17b9a; --pos-particle:#dcb15a;
+    --pos-verb:#5fbf8a; --pos-noun:#7ea2ff; --pos-particle:#ff9a4d;
   }
   html{scroll-padding-top:env(safe-area-inset-top,0px);}
   *{box-sizing:border-box;}
@@ -100,6 +100,7 @@
   <button data-tool="treebank.jsp" class="viewbtn">Treebank</button>
   <button id="notesTab">My Notes</button>
   <button id="bookmarksTab">Bookmarks</button>
+  <button id="surahsTab">Surahs</button>
 </nav>
 
 <div class="jumpbar">
@@ -107,6 +108,7 @@
   <input type="number" id="chapterInput" min="1" max="114" placeholder="Surah" value="1">
   <input type="number" id="verseInput" min="1" placeholder="Ayah" value="1">
   <button class="ghost" id="nextVerseBtn" style="border:1px solid var(--accent); background:transparent; padding:.45rem .6rem;">›</button>
+  <button class="ghost" id="randomVerseBtn" style="border:1px solid var(--accent); background:transparent; padding:.45rem .6rem;">🎲</button>
   <button class="ghost" id="bookmarkBtn" style="border:1px solid var(--accent); background:transparent;">☆ Bookmark</button>
 </div>
 
@@ -115,6 +117,7 @@
     <div class="card" style="text-align:center; padding:1rem .8rem;">
       <div style="font-size:.85rem; color:var(--sub); margin-bottom:.3rem;">Currently set to</div>
       <div style="font-size:1.4rem; font-weight:600; margin-bottom:.6rem;" id="refBig">1:1</div>
+      <button id="readSurahBtn" class="pill-btn" style="margin-right:.4rem; font-size:.85rem; padding:.6rem 1rem; background:transparent; color:var(--accent);">📜 Read full surah</button>
       <a id="openMain" href="#" target="_blank" rel="noopener" style="display:inline-block; padding:.6rem 1.2rem; border-radius:.6rem; background:var(--accent); color:var(--accent-ink); text-decoration:none; font-weight:600; font-size:.85rem;">Open on corpus.quran.com ↗</a>
     </div>
     <div class="row" style="flex-wrap:wrap; justify-content:center; margin-top:.6rem;">
@@ -130,6 +133,7 @@
         <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-noun); margin-right:.3rem;"></span>Noun / pronoun</span>
         <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-particle); margin-right:.3rem;"></span>Particle</span>
       </div>
+      <div id="fullVerseLine" style="text-align:right; direction:rtl; font-size:1.3rem; line-height:2.1; padding:.7rem; background:var(--panel); border:1px solid var(--line); border-radius:.6rem; margin-bottom:.6rem;"></div>
       <div class="hint" style="text-align:center; margin-bottom:.4rem;">Tap any word to see its root and every occurrence of that root.</div>
       <div id="grammarContent"></div>
       <div id="wordDetail" style="display:none; margin-top:.5rem;"></div>
@@ -140,6 +144,16 @@
       <div class="hint" style="text-align:center; margin-bottom:.4rem;">Roots added to this app so far, with the grammar/meaning notes — tap any root for its Quran-wide dictionary entry.</div>
       <div id="dictionaryContent"></div>
       <div id="dictWordDetail" style="display:none; margin-top:.5rem;"></div>
+    </div>
+
+    <div id="offlineTranslationBlock" style="margin-top:.8rem; display:none;">
+      <div style="display:flex; gap:.9rem; justify-content:center; flex-wrap:wrap; font-size:.72rem; color:var(--sub); margin-bottom:.5rem;">
+        <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-verb); margin-right:.3rem;"></span>Verb</span>
+        <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-noun); margin-right:.3rem;"></span>Noun / pronoun</span>
+        <span><span style="display:inline-block; width:.6rem; height:.6rem; border-radius:50%; background:var(--pos-particle); margin-right:.3rem;"></span>Particle</span>
+      </div>
+      <div id="translationContent"></div>
+      <div class="hint" id="noTranslationHint" style="text-align:center; display:none;">Offline translation for this verse isn't added yet — tap Open above to view it on corpus.quran.com.</div>
     </div>
   </div>
 
@@ -157,6 +171,20 @@
   <div class="panel" id="bookmarksPanel" style="display:none;">
     <h2>Bookmarked verses</h2>
     <div id="bookmarkList"></div>
+  </div>
+
+  <div class="panel" id="surahsPanel" style="display:none;">
+    <h2>Surahs available offline</h2>
+    <div class="hint" style="margin-bottom:.6rem;">Tap a surah to read it straight through. "Complete" surahs have every verse added; partial ones grow over time.</div>
+    <div id="surahList"></div>
+  </div>
+
+  <div class="panel" id="readerPanel" style="display:none;">
+    <div id="readerNavTop" style="display:flex; gap:.5rem; margin-bottom:.6rem;"></div>
+    <h2 id="readerTitle" style="color:var(--ink); font-size:1.05rem;"></h2>
+    <div class="hint" id="readerSub" style="margin-bottom:.6rem;"></div>
+    <div id="readerContent"></div>
+    <div id="readerNavBottom" style="display:flex; gap:.5rem; margin-top:.8rem;"></div>
   </div>
 </main>
 
@@ -184,14 +212,19 @@
     updateBookmarkStar();
     const offlineBlock = document.getElementById('offlineGrammarBlock');
     const dictBlock = document.getElementById('offlineDictionaryBlock');
+    const transBlock = document.getElementById('offlineTranslationBlock');
     offlineBlock.style.display = 'none';
     dictBlock.style.display = 'none';
+    transBlock.style.display = 'none';
     if(currentTool === 'wordbyword.jsp'){
       offlineBlock.style.display = 'block';
       renderOfflineGrammar();
     } else if(currentTool === 'qurandictionary.jsp'){
       dictBlock.style.display = 'block';
       renderOfflineDictionary();
+    } else if(currentTool === 'translation.jsp'){
+      transBlock.style.display = 'block';
+      renderOfflineTranslation();
     }
   }
 
@@ -222,6 +255,13 @@
   document.getElementById('nextVerseBtn').addEventListener('click', ()=>{
     goToVerse(+chapterInput.value || 1, (+verseInput.value || 1) + 1);
   });
+  document.getElementById('randomVerseBtn').addEventListener('click', ()=>{
+    const c = Math.floor(Math.random() * 114) + 1;
+    const v = Math.floor(Math.random() * SURAH_AYAH_COUNT[c]) + 1;
+    chapterInput.value = c;
+    verseInput.value = v;
+    updateFrame();
+  });
 
   viewBtns.forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -239,16 +279,94 @@
   const bookmarksTab = document.getElementById('bookmarksTab');
   const notesPanel = document.getElementById('notesPanel');
   const bookmarksPanel = document.getElementById('bookmarksPanel');
+  const surahsPanel = document.getElementById('surahsPanel');
+  const readerPanel = document.getElementById('readerPanel');
 
   const launchPanel = document.getElementById('launchPanel');
   function showMain(which){
     launchPanel.style.display = which==='launch' ? 'block' : 'none';
     notesPanel.style.display = which==='notes' ? 'block' : 'none';
     bookmarksPanel.style.display = which==='bookmarks' ? 'block' : 'none';
+    surahsPanel.style.display = which==='surahs' ? 'block' : 'none';
+    readerPanel.style.display = which==='reader' ? 'block' : 'none';
   }
 
   notesTab.addEventListener('click', ()=>{ showMain('notes'); renderAllNotes(); });
   bookmarksTab.addEventListener('click', ()=>{ showMain('bookmarks'); renderBookmarks(); });
+  document.getElementById('surahsTab').addEventListener('click', ()=>{ showMain('surahs'); renderSurahList(); });
+  document.getElementById('readSurahBtn').addEventListener('click', ()=>{
+    const cur = +chapterInput.value || 1;
+    if(GRAMMAR_DATA[cur]) openReader(cur);
+    else { showMain('surahs'); renderSurahList(); }
+  });
+
+  const SURAH_NAMES = {1:'Al-Fatihah',2:'Al-Baqarah',93:'Ad-Duha',94:'Ash-Sharh',95:'At-Tin',97:'Al-Qadr',99:'Az-Zalzalah',102:'At-Takathur',103:'Al-Asr',104:'Al-Humazah',105:'Al-Fil',106:'Quraysh',107:'Al-Maun',108:'Al-Kawthar',109:'Al-Kafirun',110:'An-Nasr',111:'Al-Masad',112:'Al-Ikhlas',113:'Al-Falaq',114:'An-Nas'};
+
+  function surahVerseCount(s){ return GRAMMAR_DATA[s] ? Object.keys(GRAMMAR_DATA[s]).length : 0; }
+  function isCompleteSurah(s){ return surahVerseCount(s) === SURAH_AYAH_COUNT[s]; }
+  function availableSurahs(){ return Object.keys(GRAMMAR_DATA).map(Number).sort((a,b)=>a-b); }
+  function completeSurahs(){ return availableSurahs().filter(isCompleteSurah); }
+  function nextCompleteAfter(s){ const l = completeSurahs().filter(n=>n>s); return l.length ? l[0] : null; }
+  function prevCompleteBefore(s){ const l = completeSurahs().filter(n=>n<s); return l.length ? l[l.length-1] : null; }
+  function surahLabel(s){ return s + '. ' + (SURAH_NAMES[s] || 'Surah ' + s); }
+
+  function renderSurahList(){
+    const el = document.getElementById('surahList');
+    el.innerHTML = availableSurahs().map(s => {
+      const have = surahVerseCount(s), total = SURAH_AYAH_COUNT[s];
+      const status = have === total ? 'Complete · ' + total + ' verses' : 'Partial · ' + have + ' of ' + total + ' verses';
+      return `<div class="card surahRow" data-surah="${s}" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:.5rem;">
+        <strong>${surahLabel(s)}</strong>
+        <span class="hint" style="margin:0;">${status}</span>
+      </div>`;
+    }).join('');
+    el.querySelectorAll('.surahRow').forEach(row=>row.addEventListener('click', ()=>openReader(+row.dataset.surah)));
+  }
+
+  function readerNavHTML(s){
+    const prev = prevCompleteBefore(s), next = nextCompleteAfter(s);
+    const btn = (target, label, dir) => target
+      ? `<button class="pill-btn readerGo" data-surah="${target}" style="flex:1; background:transparent; color:var(--accent); font-size:.8rem;">${dir==='prev' ? '‹ ' : ''}${label}${dir==='next' ? ' ›' : ''}</button>`
+      : `<button class="pill-btn" disabled style="flex:1; opacity:.35; background:transparent; color:var(--accent); font-size:.8rem;">${dir==='prev' ? '‹ No earlier surah' : 'No later surah yet ›'}</button>`;
+    return btn(prev, prev ? surahLabel(prev) : '', 'prev') + btn(next, next ? surahLabel(next) : '', 'next');
+  }
+
+  function openReader(s){
+    const data = GRAMMAR_DATA[s];
+    if(!data) return;
+    const verses = Object.keys(data).map(Number).sort((a,b)=>a-b);
+    const total = SURAH_AYAH_COUNT[s];
+    document.getElementById('readerTitle').textContent = surahLabel(s);
+    document.getElementById('readerSub').textContent = verses.length === total
+      ? 'Complete · ' + total + ' verses · tap a verse number for its word-by-word grammar'
+      : 'Partial · ' + verses.length + ' of ' + total + ' verses added so far · tap a verse number for its word-by-word grammar';
+    document.getElementById('readerContent').innerHTML = verses.map(v => {
+      const tr = (TRANSLATIONS[s] && TRANSLATIONS[s][v]) || '';
+      return `<div class="card">
+        <div class="meta"><button class="icon-btn readerVerse" style="color:var(--accent);" data-surah="${s}" data-verse="${v}">${s}:${v} · word by word</button></div>
+        <div style="text-align:right; direction:rtl; font-size:1.3rem; line-height:2; margin-top:.3rem;">${buildFullVerseHTML(data[v])}</div>
+        ${tr ? `<div style="margin-top:.5rem; padding-top:.5rem; border-top:1px solid var(--line); font-size:.9rem; line-height:1.5;">${tr}</div>` : ''}
+      </div>`;
+    }).join('');
+    const nav = readerNavHTML(s);
+    document.getElementById('readerNavTop').innerHTML = nav;
+    document.getElementById('readerNavBottom').innerHTML = nav;
+    showMain('reader');
+    readerPanel.scrollTop = 0;
+    readerPanel.querySelectorAll('.readerGo').forEach(b=>b.addEventListener('click', ()=>openReader(+b.dataset.surah)));
+    readerPanel.querySelectorAll('.readerVerse').forEach(b=>b.addEventListener('click', ()=>{
+      chapterInput.value = b.dataset.surah; verseInput.value = b.dataset.verse;
+      currentTool = 'wordbyword.jsp';
+      viewBtns.forEach(bt=>{
+        const on = bt.dataset.tool==='wordbyword.jsp';
+        bt.classList.toggle('active', on);
+        bt.style.background = on ? 'var(--accent)' : 'transparent';
+        bt.style.color = on ? 'var(--accent-ink)' : 'var(--accent)';
+      });
+      showMain('launch');
+      updateFrame();
+    }));
+  }
 
   // Offline word-by-word grammar, keyed by surah -> ayah -> words.
   // Add more surahs/verses here in Quranic order as they're built out.
@@ -394,6 +512,100 @@
         {ar:'أَنفُسَهُمْ', root:'ن ف س', pos:'Noun + pronoun', case:'Accusative', note:'Excepted object — "themselves."'},
         {ar:'وَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
         {ar:'يَشْعُرُونَ', root:'ش ع ر', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"They perceive [it]" — unaware of the self-harm they cause.'}
+      ],
+      10: [
+        {ar:'فِي قُلُوبِهِم', root:'ق ل ب', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"In their hearts."'},
+        {ar:'مَّرَضٌ', root:'م ر ض', pos:'Noun', case:'Nominative', note:'Delayed subject — "a sickness."'},
+        {ar:'فَزَادَهُمُ', root:'ز ي د', pos:'Conjunction + verb, perfect + pronoun', case:'3rd person masc. sing.', note:'"So has increased them."'},
+        {ar:'اللَّهُ', root:'أ ل ه', pos:'Proper noun', case:'Nominative', note:'Subject.'},
+        {ar:'مَرَضًا', root:'م ر ض', pos:'Noun', case:'Accusative', note:'Second object — "[in] sickness."'},
+        {ar:'وَلَهُمْ', root:'—', pos:'Conjunction + preposition + pronoun', case:'—', note:'"And for them [is]."'},
+        {ar:'عَذَابٌ', root:'ع ذ ب', pos:'Noun', case:'Nominative', note:'"A punishment."'},
+        {ar:'أَلِيمٌ', root:'أ ل م', pos:'Adjective', case:'Nominative', note:'"Painful."'},
+        {ar:'بِمَا', root:'—', pos:'Preposition + relative pronoun', case:'—', note:'"Because of what."'},
+        {ar:'كَانُوا', root:'ك و ن', pos:'Verb, perfect (kāna)', case:'3rd person masc. plural', note:'"They used to."'},
+        {ar:'يَكْذِبُونَ', root:'ك ذ ب', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"Lie."'}
+      ],
+      11: [
+        {ar:'وَإِذَا', root:'—', pos:'Conjunction + adverb', case:'—', note:'"And when."'},
+        {ar:'قِيلَ', root:'ق و ل', pos:'Verb, perfect (passive)', case:'3rd person masc. sing.', note:'"It is said."'},
+        {ar:'لَهُمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"To them."'},
+        {ar:'لَا', root:'—', pos:'Negation particle', case:'—', note:'Forbids the following verb.'},
+        {ar:'تُفْسِدُوا', root:'ف س د', pos:'Verb, imperfect jussive', case:'2nd person masc. plural', note:'"[Do not] cause corruption."'},
+        {ar:'فِي الْأَرْضِ', root:'أ ر ض', pos:'Preposition + noun', case:'Genitive', note:'"In the land."'},
+        {ar:'قَالُوا', root:'ق و ل', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"They say."'},
+        {ar:'إِنَّمَا', root:'—', pos:'Restrictive particle', case:'—', note:'"Only/indeed."'},
+        {ar:'نَحْنُ', root:'—', pos:'Pronoun', case:'Nominative', note:'"We."'},
+        {ar:'مُصْلِحُونَ', root:'ص ل ح', pos:'Noun (active participle, Form IV)', case:'Nominative', note:'"Reformers" — their claimed self-image.'}
+      ],
+      12: [
+        {ar:'أَلَا', root:'—', pos:'Alert particle', case:'—', note:'"Indeed/verily."'},
+        {ar:'إِنَّهُمْ', root:'—', pos:'Accusative particle + pronoun', case:'Accusative', note:'"Indeed they."'},
+        {ar:'هُمُ', root:'—', pos:'Pronoun (faṣl)', case:'—', note:'Emphasis marker.'},
+        {ar:'الْمُفْسِدُونَ', root:'ف س د', pos:'Noun (active participle, Form IV)', case:'Nominative', note:'"The corrupters" — corrects their self-image from v.11.'},
+        {ar:'وَلَٰكِن', root:'—', pos:'Conjunction + particle', case:'—', note:'"But."'},
+        {ar:'لَّا', root:'—', pos:'Negation particle', case:'—', note:'Negates the verb.'},
+        {ar:'يَشْعُرُونَ', root:'ش ع ر', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"They perceive [it not]."'}
+      ],
+      13: [
+        {ar:'وَإِذَا', root:'—', pos:'Conjunction + adverb', case:'—', note:'"And when."'},
+        {ar:'قِيلَ', root:'ق و ل', pos:'Verb, perfect (passive)', case:'—', note:'"It is said."'},
+        {ar:'لَهُمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"To them."'},
+        {ar:'آمِنُوا', root:'أ م ن', pos:'Verb, imperative', case:'2nd person masc. plural', note:'"Believe."'},
+        {ar:'كَمَا', root:'—', pos:'Particle', case:'—', note:'"As."'},
+        {ar:'آمَنَ', root:'أ م ن', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Believed."'},
+        {ar:'النَّاسُ', root:'ن و س', pos:'Noun', case:'Nominative', note:'"The people."'},
+        {ar:'قَالُوا', root:'ق و ل', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"They say."'},
+        {ar:'أَنُؤْمِنُ', root:'أ م ن', pos:'Interrogative + verb, imperfect', case:'1st person plural', note:'"Shall we believe."'},
+        {ar:'كَمَا', root:'—', pos:'Particle', case:'—', note:'"As."'},
+        {ar:'آمَنَ', root:'أ م ن', pos:'Verb, perfect', case:'—', note:'"Believed."'},
+        {ar:'السُّفَهَاءُ', root:'س ف ه', pos:'Noun', case:'Nominative', note:'"The foolish [ones]" — dismissive term for believers.'},
+        {ar:'أَلَا', root:'—', pos:'Alert particle', case:'—', note:'"Indeed."'},
+        {ar:'إِنَّهُمْ', root:'—', pos:'Particle + pronoun', case:'Accusative', note:'"Indeed they."'},
+        {ar:'هُمُ', root:'—', pos:'Pronoun (faṣl)', case:'—', note:'Emphasis marker.'},
+        {ar:'السُّفَهَاءُ', root:'س ف ه', pos:'Noun', case:'Nominative', note:'"The foolish" — reversed back onto them.'},
+        {ar:'وَلَٰكِن', root:'—', pos:'Conjunction + particle', case:'—', note:'"But."'},
+        {ar:'لَّا', root:'—', pos:'Negation particle', case:'—', note:'Negates the verb.'},
+        {ar:'يَعْلَمُونَ', root:'ع ل م', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"They know [not]."'}
+      ],
+      14: [
+        {ar:'وَإِذَا', root:'—', pos:'Conjunction + adverb', case:'—', note:'"And when."'},
+        {ar:'لَقُوا', root:'ل ق ي', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"They meet."'},
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'Accusative', note:'"Those who."'},
+        {ar:'آمَنُوا', root:'أ م ن', pos:'Verb, perfect', case:'—', note:'"Believed."'},
+        {ar:'قَالُوا', root:'ق و ل', pos:'Verb, perfect', case:'—', note:'"They say."'},
+        {ar:'آمَنَّا', root:'أ م ن', pos:'Verb, perfect', case:'1st person plural', note:'"We believe."'},
+        {ar:'وَإِذَا', root:'—', pos:'Conjunction + adverb', case:'—', note:'"And when."'},
+        {ar:'خَلَوْا', root:'خ ل و', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"They are alone."'},
+        {ar:'إِلَىٰ', root:'—', pos:'Preposition', case:'—', note:'"To/with."'},
+        {ar:'شَيَاطِينِهِمْ', root:'ش ط ن', pos:'Noun + pronoun', case:'Genitive', note:'"Their devils/ringleaders."'},
+        {ar:'قَالُوا', root:'ق و ل', pos:'Verb, perfect', case:'—', note:'"They say."'},
+        {ar:'إِنَّا', root:'—', pos:'Particle + pronoun', case:'—', note:'"Indeed we."'},
+        {ar:'مَعَكُمْ', root:'—', pos:'Adverb + pronoun', case:'—', note:'"[Are] with you."'},
+        {ar:'إِنَّمَا', root:'—', pos:'Restrictive particle', case:'—', note:'"Only."'},
+        {ar:'نَحْنُ', root:'—', pos:'Pronoun', case:'Nominative', note:'"We."'},
+        {ar:'مُسْتَهْزِئُونَ', root:'ه ز أ', pos:'Noun (active participle, Form X)', case:'Nominative', note:'"Mockers" — the double-dealing revealed.'}
+      ],
+      15: [
+        {ar:'اللَّهُ', root:'أ ل ه', pos:'Proper noun', case:'Nominative', note:'Subject.'},
+        {ar:'يَسْتَهْزِئُ', root:'ه ز أ', pos:'Verb, imperfect (Form X)', case:'3rd person masc. sing.', note:'"Mocks [them back]" — in return for their mockery.'},
+        {ar:'بِهِمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"At them."'},
+        {ar:'وَيَمُدُّهُمْ', root:'م د د', pos:'Conjunction + verb, imperfect + pronoun', case:'3rd person masc. sing.', note:'"And prolongs/extends them."'},
+        {ar:'فِي طُغْيَانِهِمْ', root:'ط غ ي', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"In their transgression."'},
+        {ar:'يَعْمَهُونَ', root:'ع م ه', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"Wandering blindly."'}
+      ],
+      16: [
+        {ar:'أُولَٰئِكَ', root:'—', pos:'Demonstrative pronoun', case:'Nominative', note:'"Those."'},
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'—', note:'"Who."'},
+        {ar:'اشْتَرَوُا', root:'ش ر ي', pos:'Verb, perfect (Form VIII)', case:'3rd person masc. plural', note:'"They bought/traded."'},
+        {ar:'الضَّلَالَةَ', root:'ض ل ل', pos:'Noun', case:'Accusative', note:'"Misguidance" — the item bought.'},
+        {ar:'بِالْهُدَىٰ', root:'ه د ي', pos:'Preposition + noun', case:'Genitive', note:'"For guidance" — the price paid.'},
+        {ar:'فَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"So not."'},
+        {ar:'رَبِحَت', root:'ر ب ح', pos:'Verb, perfect', case:'3rd person fem. sing.', note:'"Profited."'},
+        {ar:'تِّجَارَتُهُمْ', root:'ت ج ر', pos:'Noun + pronoun', case:'Nominative', note:'"Their trade/transaction" — subject of rabiḥat.'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'كَانُوا', root:'ك و ن', pos:'Verb, perfect (kāna)', case:'3rd person masc. plural', note:'"They were."'},
+        {ar:'مُهْتَدِينَ', root:'ه د ي', pos:'Noun (active participle, Form VIII)', case:'—', note:'"Guided."'}
       ]
     },
     112: {
@@ -438,6 +650,631 @@
         {ar:'هُوَ', root:'—', pos:'Pronoun (separating/faṣl)', case:'—', note:'Emphasizes the predicate that follows.'},
         {ar:'الْأَبْتَرُ', root:'ب ت ر', pos:'Noun/adjective', case:'Nominative', note:'Khabar of inna — "the one cut off," without lasting legacy.'}
       ]
+    },
+    110: {
+      1: [
+        {ar:'إِذَا', root:'—', pos:'Adverb', case:'—', note:'"When."'},
+        {ar:'جَاءَ', root:'ج ي أ', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Comes."'},
+        {ar:'نَصْرُ', root:'ن ص ر', pos:'Noun', case:'Nominative', note:'Subject — "the help/victory of."'},
+        {ar:'اللَّهِ', root:'أ ل ه', pos:'Proper noun', case:'Genitive', note:'Muḍāf ilayh.'},
+        {ar:'وَالْفَتْحُ', root:'ف ت ح', pos:'Conjunction + noun', case:'Nominative', note:'"And the conquest" — conjoined subject.'}
+      ],
+      2: [
+        {ar:'وَرَأَيْتَ', root:'ر أ ي', pos:'Conjunction + verb, perfect', case:'2nd person masc. sing.', note:'"And you see."'},
+        {ar:'النَّاسَ', root:'ن و س', pos:'Noun', case:'Accusative', note:'Object.'},
+        {ar:'يَدْخُلُونَ', root:'د خ ل', pos:'Verb, imperfect', case:'3rd person masc. plural', note:'"Entering."'},
+        {ar:'فِي دِينِ', root:'د ي ن', pos:'Preposition + noun', case:'Genitive', note:'"Into the religion of."'},
+        {ar:'اللَّهِ', root:'أ ل ه', pos:'Proper noun', case:'Genitive', note:'Muḍāf ilayh.'},
+        {ar:'أَفْوَاجًا', root:'ف و ج', pos:'Noun', case:'Accusative', note:'Circumstantial — "in crowds/troops."'}
+      ],
+      3: [
+        {ar:'فَسَبِّحْ', root:'س ب ح', pos:'Conjunction + verb, imperative', case:'2nd person masc. sing.', note:'"So glorify."'},
+        {ar:'بِحَمْدِ', root:'ح م د', pos:'Preposition + noun', case:'Genitive', note:'"With the praise of."'},
+        {ar:'رَبِّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Genitive', note:'"Your Lord."'},
+        {ar:'وَاسْتَغْفِرْهُ', root:'غ ف ر', pos:'Conjunction + verb, imperative (Form X) + pronoun', case:'2nd person masc. sing.', note:'"And seek His forgiveness."'},
+        {ar:'إِنَّهُ', root:'—', pos:'Particle + pronoun', case:'Accusative', note:'"Indeed He."'},
+        {ar:'كَانَ', root:'ك و ن', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Is/was."'},
+        {ar:'تَوَّابًا', root:'ت و ب', pos:'Noun (intensive)', case:'Accusative', note:'"Ever-Accepting of repentance."'}
+      ]
+    },
+    103: {
+      1: [
+        {ar:'وَالْعَصْرِ', root:'ع ص ر', pos:'Oath particle + noun', case:'Genitive', note:'"By time/the age" — object of the oath.'}
+      ],
+      2: [
+        {ar:'إِنَّ', root:'—', pos:'Accusative particle', case:'—', note:'"Indeed."'},
+        {ar:'الْإِنسَانَ', root:'أ ن س', pos:'Noun', case:'Accusative', note:'Subject (ism) of inna — "mankind."'},
+        {ar:'لَفِي', root:'—', pos:'Emphatic particle + preposition', case:'—', note:'"Surely in."'},
+        {ar:'خُسْرٍ', root:'خ س ر', pos:'Noun', case:'Genitive', note:'Khabar — "loss."'}
+      ],
+      3: [
+        {ar:'إِلَّا', root:'—', pos:'Exception particle', case:'—', note:'"Except."'},
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'—', note:'"Those who."'},
+        {ar:'آمَنُوا', root:'أ م ن', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"Believed."'},
+        {ar:'وَعَمِلُوا', root:'ع م ل', pos:'Conjunction + verb, perfect', case:'3rd person masc. plural', note:'"And did."'},
+        {ar:'الصَّالِحَاتِ', root:'ص ل ح', pos:'Noun (active participle, plural)', case:'Accusative', note:'"Righteous deeds."'},
+        {ar:'وَتَوَاصَوْا', root:'و ص ي', pos:'Conjunction + verb, perfect (Form VI)', case:'3rd person masc. plural', note:'"And advised each other."'},
+        {ar:'بِالْحَقِّ', root:'ح ق ق', pos:'Preposition + noun', case:'Genitive', note:'"With truth."'},
+        {ar:'وَتَوَاصَوْا', root:'و ص ي', pos:'Conjunction + verb, perfect (Form VI)', case:'—', note:'"And advised each other" — repeated for the second virtue.'},
+        {ar:'بِالصَّبْرِ', root:'ص ب ر', pos:'Preposition + noun', case:'Genitive', note:'"With patience."'}
+      ]
+    },
+    113: {
+      1: [
+        {ar:'قُلْ', root:'ق و ل', pos:'Verb, imperative', case:'2nd person masc. sing.', note:'"Say."'},
+        {ar:'أَعُوذُ', root:'ع و ذ', pos:'Verb, imperfect', case:'1st person sing.', note:'"I seek refuge."'},
+        {ar:'بِرَبِّ', root:'ر ب ب', pos:'Preposition + noun', case:'Genitive', note:'"With the Lord of."'},
+        {ar:'الْفَلَقِ', root:'ف ل ق', pos:'Noun', case:'Genitive', note:'Muḍāf ilayh — "the daybreak."'}
+      ],
+      2: [
+        {ar:'مِن شَرِّ', root:'ش ر ر', pos:'Preposition + noun', case:'Genitive', note:'"From the evil of."'},
+        {ar:'مَا', root:'—', pos:'Relative pronoun', case:'—', note:'"What."'},
+        {ar:'خَلَقَ', root:'خ ل ق', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"He created."'}
+      ],
+      3: [
+        {ar:'وَمِن شَرِّ', root:'ش ر ر', pos:'Conjunction + preposition + noun', case:'Genitive', note:'"And from the evil of."'},
+        {ar:'غَاسِقٍ', root:'غ س ق', pos:'Noun (active participle)', case:'Genitive', note:'"Darkness/night."'},
+        {ar:'إِذَا', root:'—', pos:'Adverb', case:'—', note:'"When."'},
+        {ar:'وَقَبَ', root:'و ق ب', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"It settles/descends."'}
+      ],
+      4: [
+        {ar:'وَمِن شَرِّ', root:'ش ر ر', pos:'Conjunction + preposition + noun', case:'Genitive', note:'"And from the evil of."'},
+        {ar:'النَّفَّاثَاتِ', root:'ن ف ث', pos:'Noun (intensive active participle, fem. plural)', case:'Genitive', note:'"The blowers" (traditionally, on knots — sorcery)."'},
+        {ar:'فِي الْعُقَدِ', root:'ع ق د', pos:'Preposition + noun', case:'Genitive', note:'"In the knots."'}
+      ],
+      5: [
+        {ar:'وَمِن شَرِّ', root:'ش ر ر', pos:'Conjunction + preposition + noun', case:'Genitive', note:'"And from the evil of."'},
+        {ar:'حَاسِدٍ', root:'ح س د', pos:'Noun (active participle)', case:'Genitive', note:'"An envier."'},
+        {ar:'إِذَا', root:'—', pos:'Adverb', case:'—', note:'"When."'},
+        {ar:'حَسَدَ', root:'ح س د', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"He envies."'}
+      ]
+    },
+    114: {
+      1: [
+        {ar:'قُلْ', root:'ق و ل', pos:'Verb, imperative', case:'2nd person masc. sing.', note:'"Say."'},
+        {ar:'أَعُوذُ', root:'ع و ذ', pos:'Verb, imperfect', case:'1st person sing.', note:'"I seek refuge."'},
+        {ar:'بِرَبِّ', root:'ر ب ب', pos:'Preposition + noun', case:'Genitive', note:'"With the Lord of."'},
+        {ar:'النَّاسِ', root:'ن و س', pos:'Noun', case:'Genitive', note:'Muḍāf ilayh — "mankind."'}
+      ],
+      2: [
+        {ar:'مَلِكِ', root:'م ل ك', pos:'Noun', case:'Genitive', note:'Badal — "King of."'},
+        {ar:'النَّاسِ', root:'ن و س', pos:'Noun', case:'Genitive', note:'"Mankind."'}
+      ],
+      3: [
+        {ar:'إِلَٰهِ', root:'أ ل ه', pos:'Noun', case:'Genitive', note:'Badal — "God of."'},
+        {ar:'النَّاسِ', root:'ن و س', pos:'Noun', case:'Genitive', note:'"Mankind."'}
+      ],
+      4: [
+        {ar:'مِن شَرِّ', root:'ش ر ر', pos:'Preposition + noun', case:'Genitive', note:'"From the evil of."'},
+        {ar:'الْوَسْوَاسِ', root:'و س و س', pos:'Noun', case:'Genitive', note:'"The whisperer."'},
+        {ar:'الْخَنَّاسِ', root:'خ ن س', pos:'Adjective (intensive)', case:'Genitive', note:'"The retreating/sneaking [one]" — withdraws at the mention of Allah.'}
+      ],
+      5: [
+        {ar:'الَّذِي', root:'—', pos:'Relative pronoun', case:'—', note:'"Who."'},
+        {ar:'يُوَسْوِسُ', root:'و س و س', pos:'Verb, imperfect', case:'3rd person masc. sing.', note:'"Whispers."'},
+        {ar:'فِي صُدُورِ', root:'ص د ر', pos:'Preposition + noun', case:'Genitive', note:'"Into the chests of."'},
+        {ar:'النَّاسِ', root:'ن و س', pos:'Noun', case:'Genitive', note:'"Mankind."'}
+      ],
+      6: [
+        {ar:'مِنَ', root:'—', pos:'Preposition', case:'—', note:'"Of/from."'},
+        {ar:'الْجِنَّةِ', root:'ج ن ن', pos:'Noun', case:'Genitive', note:'"The jinn."'},
+        {ar:'وَالنَّاسِ', root:'ن و س', pos:'Conjunction + noun', case:'Genitive', note:'"And mankind" — the whisperer can be from either.'}
+      ]
+    },
+    106: {
+      1: [
+        {ar:'لِإِيلَافِ', root:'أ ل ف', pos:'Preposition + noun (verbal noun, Form IV)', case:'Genitive', note:'"For the accustomed security/covenant of."'},
+        {ar:'قُرَيْشٍ', root:'—', pos:'Proper noun', case:'Genitive', note:'"Quraysh" — muḍāf ilayh, no triliteral root (tribal name).'}
+      ],
+      2: [
+        {ar:'إِيلَافِهِمْ', root:'أ ل ف', pos:'Noun + pronoun', case:'Accusative', note:'Restates v.1 — "their security."'},
+        {ar:'رِحْلَةَ', root:'ر ح ل', pos:'Noun', case:'Accusative', note:'"[In their] journey of."'},
+        {ar:'الشِّتَاءِ', root:'ش ت و', pos:'Noun', case:'Genitive', note:'"Winter."'},
+        {ar:'وَالصَّيْفِ', root:'ص ي ف', pos:'Conjunction + noun', case:'Genitive', note:'"And summer."'}
+      ],
+      3: [
+        {ar:'فَلْيَعْبُدُوا', root:'ع ب د', pos:'Conjunction + verb, jussive (lām of command)', case:'3rd person masc. plural', note:'"So let them worship."'},
+        {ar:'رَبَّ', root:'ر ب ب', pos:'Noun', case:'Accusative', note:'Object — "the Lord of."'},
+        {ar:'هَٰذَا', root:'—', pos:'Demonstrative pronoun', case:'—', note:'"This."'},
+        {ar:'الْبَيْتِ', root:'ب ي ت', pos:'Noun', case:'Genitive', note:'Badal — "the House" (the Kaʿbah).'}
+      ],
+      4: [
+        {ar:'الَّذِي', root:'—', pos:'Relative pronoun', case:'—', note:'"Who."'},
+        {ar:'أَطْعَمَهُم', root:'ط ع م', pos:'Verb, perfect (Form IV) + pronoun', case:'3rd person masc. sing.', note:'"Fed them."'},
+        {ar:'مِّن جُوعٍ', root:'ج و ع', pos:'Preposition + noun', case:'Genitive', note:'"From hunger."'},
+        {ar:'وَآمَنَهُم', root:'أ م ن', pos:'Conjunction + verb, perfect (Form IV) + pronoun', case:'3rd person masc. sing.', note:'"And secured them."'},
+        {ar:'مِّنْ خَوْفٍ', root:'خ و ف', pos:'Preposition + noun', case:'Genitive', note:'"From fear."'}
+      ]
+    },
+    97: {
+      1: [
+        {ar:'إِنَّا', root:'—', pos:'Accusative particle + pronoun', case:'—', note:'"Indeed We."'},
+        {ar:'أَنزَلْنَاهُ', root:'ن ز ل', pos:'Verb, perfect (Form IV) + pronouns', case:'1st person plural', note:'"We sent it down" — nā (subject) + hu (the Qur\'an, object).'},
+        {ar:'فِي لَيْلَةِ', root:'ل ي ل', pos:'Preposition + noun', case:'Genitive', note:'"In the night of."'},
+        {ar:'الْقَدْرِ', root:'ق د ر', pos:'Noun', case:'Genitive', note:'Muḍāf ilayh — "Decree/Power."'}
+      ],
+      2: [
+        {ar:'وَمَا', root:'—', pos:'Conjunction + interrogative', case:'—', note:'"And what."'},
+        {ar:'أَدْرَاكَ', root:'د ر ي', pos:'Verb, perfect (Form IV) + pronoun', case:'2nd person masc. sing.', note:'"Makes you know" — rhetorical, stresses its greatness.'},
+        {ar:'مَا', root:'—', pos:'Interrogative pronoun', case:'—', note:'"What [is]."'},
+        {ar:'لَيْلَةُ', root:'ل ي ل', pos:'Noun', case:'Nominative', note:'"The Night of."'},
+        {ar:'الْقَدْرِ', root:'ق د ر', pos:'Noun', case:'Genitive', note:'"Decree."'}
+      ],
+      3: [
+        {ar:'لَيْلَةُ', root:'ل ي ل', pos:'Noun', case:'Nominative', note:'Subject.'},
+        {ar:'الْقَدْرِ', root:'ق د ر', pos:'Noun', case:'Genitive', note:'"Decree."'},
+        {ar:'خَيْرٌ', root:'خ ي ر', pos:'Noun/adjective', case:'Nominative', note:'Khabar — "better."'},
+        {ar:'مِّنْ أَلْفِ', root:'أ ل ف', pos:'Preposition + noun', case:'Genitive', note:'"Than a thousand."'},
+        {ar:'شَهْرٍ', root:'ش ه ر', pos:'Noun', case:'Genitive', note:'"Month."'}
+      ],
+      4: [
+        {ar:'تَنَزَّلُ', root:'ن ز ل', pos:'Verb, imperfect (Form V)', case:'3rd person fem./plural', note:'"Descend" — repeatedly, in stages.'},
+        {ar:'الْمَلَائِكَةُ', root:'م ل ك', pos:'Noun (plural)', case:'Nominative', note:'Subject — "the angels."'},
+        {ar:'وَالرُّوحُ', root:'ر و ح', pos:'Conjunction + noun', case:'Nominative', note:'"And the Spirit" (Jibrīl) — conjoined subject.'},
+        {ar:'فِيهَا', root:'—', pos:'Preposition + pronoun', case:'—', note:'"In it."'},
+        {ar:'بِإِذْنِ', root:'أ ذ ن', pos:'Preposition + noun', case:'Genitive', note:'"By permission of."'},
+        {ar:'رَبِّهِم', root:'ر ب ب', pos:'Noun + pronoun', case:'Genitive', note:'"Their Lord."'},
+        {ar:'مِّن كُلِّ', root:'ك ل ل', pos:'Preposition + noun', case:'Genitive', note:'"For every."'},
+        {ar:'أَمْرٍ', root:'أ م ر', pos:'Noun', case:'Genitive', note:'"Matter/affair."'}
+      ],
+      5: [
+        {ar:'سَلَامٌ', root:'س ل م', pos:'Noun', case:'Nominative', note:'"Peace" — predicate.'},
+        {ar:'هِيَ', root:'—', pos:'Pronoun', case:'Nominative', note:'"It" — refers to the night.'},
+        {ar:'حَتَّىٰ', root:'—', pos:'Preposition', case:'—', note:'"Until."'},
+        {ar:'مَطْلَعِ', root:'ط ل ع', pos:'Noun', case:'Genitive', note:'"The rising of."'},
+        {ar:'الْفَجْرِ', root:'ف ج ر', pos:'Noun', case:'Genitive', note:'"Dawn."'}
+      ]
+    },
+    105: {
+      1: [
+        {ar:'أَلَمْ', root:'—', pos:'Interrogative + negation particle', case:'—', note:'"Did not."'},
+        {ar:'تَرَ', root:'ر أ ي', pos:'Verb, imperfect jussive', case:'2nd person masc. sing.', note:'"You see."'},
+        {ar:'كَيْفَ', root:'—', pos:'Interrogative', case:'—', note:'"How."'},
+        {ar:'فَعَلَ', root:'ف ع ل', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Did/acted."'},
+        {ar:'رَبُّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Nominative', note:'Subject — "your Lord."'},
+        {ar:'بِأَصْحَابِ', root:'ص ح ب', pos:'Preposition + noun', case:'Genitive', note:'"With the companions of."'},
+        {ar:'الْفِيلِ', root:'ف ي ل', pos:'Noun', case:'Genitive', note:'"The elephant."'}
+      ],
+      2: [
+        {ar:'أَلَمْ', root:'—', pos:'Interrogative + negation particle', case:'—', note:'"Did not."'},
+        {ar:'يَجْعَلْ', root:'ج ع ل', pos:'Verb, imperfect jussive', case:'3rd person masc. sing.', note:'"Make."'},
+        {ar:'كَيْدَهُمْ', root:'ك ي د', pos:'Noun + pronoun', case:'Accusative', note:'Object — "their plot."'},
+        {ar:'فِي تَضْلِيلٍ', root:'ض ل ل', pos:'Preposition + noun', case:'Genitive', note:'"Into ruin/misdirection."'}
+      ],
+      3: [
+        {ar:'وَأَرْسَلَ', root:'ر س ل', pos:'Conjunction + verb, perfect (Form IV)', case:'3rd person masc. sing.', note:'"And sent."'},
+        {ar:'عَلَيْهِمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"Upon them."'},
+        {ar:'طَيْرًا', root:'ط ي ر', pos:'Noun', case:'Accusative', note:'Object — "birds."'},
+        {ar:'أَبَابِيلَ', root:'—', pos:'Adjective', case:'Accusative', note:'"In flocks" — rare word, without a standard triliteral root.'}
+      ],
+      4: [
+        {ar:'تَرْمِيهِم', root:'ر م ي', pos:'Verb, imperfect + pronoun', case:'3rd person fem. sing.', note:'"Pelting them."'},
+        {ar:'بِحِجَارَةٍ', root:'ح ج ر', pos:'Preposition + noun', case:'Genitive', note:'"With stones."'},
+        {ar:'مِّن سِجِّيلٍ', root:'—', pos:'Preposition + noun', case:'Genitive', note:'"Of baked clay" — a borrowed (non-Arabic origin) word.'}
+      ],
+      5: [
+        {ar:'فَجَعَلَهُمْ', root:'ج ع ل', pos:'Conjunction + verb, perfect + pronoun', case:'3rd person masc. sing.', note:'"So He made them."'},
+        {ar:'كَعَصْفٍ', root:'ع ص ف', pos:'Preposition + noun', case:'Genitive', note:'"Like straw/husk."'},
+        {ar:'مَّأْكُولٍ', root:'أ ك ل', pos:'Noun (passive participle)', case:'Genitive', note:'"Eaten/devoured."'}
+      ]
+    },
+    111: {
+      1: [
+        {ar:'تَبَّتْ', root:'ت ب ب', pos:'Verb, perfect (fem.)', case:'3rd person fem. sing.', note:'"Perished" — a curse.'},
+        {ar:'يَدَا', root:'ي د ي', pos:'Noun (dual)', case:'Nominative', note:'Subject — "the two hands of."'},
+        {ar:'أَبِي لَهَبٍ', root:'—', pos:'Proper noun', case:'Genitive', note:'"Abu Lahab" — muḍāf ilayh; lahab itself means "flame."'},
+        {ar:'وَتَبَّ', root:'ت ب ب', pos:'Conjunction + verb, perfect', case:'3rd person masc. sing.', note:'"And he perished" — repeats the curse on him personally.'}
+      ],
+      2: [
+        {ar:'مَا', root:'—', pos:'Negation particle', case:'—', note:'"Not."'},
+        {ar:'أَغْنَىٰ', root:'غ ن ي', pos:'Verb, perfect (Form IV)', case:'3rd person masc. sing.', note:'"Availed."'},
+        {ar:'عَنْهُ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"From him."'},
+        {ar:'مَالُهُ', root:'م و ل', pos:'Noun + pronoun', case:'Nominative', note:'Subject — "his wealth."'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + relative pronoun', case:'—', note:'"And what."'},
+        {ar:'كَسَبَ', root:'ك س ب', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"He earned."'}
+      ],
+      3: [
+        {ar:'سَيَصْلَىٰ', root:'ص ل ي', pos:'Future particle + verb, imperfect', case:'3rd person masc. sing.', note:'"He will burn/enter [it]."'},
+        {ar:'نَارًا', root:'ن و ر', pos:'Noun', case:'Accusative', note:'Object — "a fire."'},
+        {ar:'ذَاتَ', root:'—', pos:'Noun (adjectival)', case:'Accusative', note:'"Possessor of."'},
+        {ar:'لَهَبٍ', root:'ل ه ب', pos:'Noun', case:'Genitive', note:'"Flame" — echoes his own name.'}
+      ],
+      4: [
+        {ar:'وَامْرَأَتُهُ', root:'م ر أ', pos:'Conjunction + noun + pronoun', case:'Nominative', note:'"And his wife" — conjoined subject.'},
+        {ar:'حَمَّالَةَ', root:'ح م ل', pos:'Noun (intensive)', case:'Accusative', note:'Circumstantial — "carrier of."'},
+        {ar:'الْحَطَبِ', root:'ح ط ب', pos:'Noun', case:'Genitive', note:'"Firewood" — traditionally, spreading slander/thorny gossip.'}
+      ],
+      5: [
+        {ar:'فِي جِيدِهَا', root:'ج ي د', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"On her neck."'},
+        {ar:'حَبْلٌ', root:'ح ب ل', pos:'Noun', case:'Nominative', note:'Subject — "a rope."'},
+        {ar:'مِّن مَّسَدٍ', root:'م س د', pos:'Preposition + noun', case:'Genitive', note:'"Of palm-fiber [twisted rope]."'}
+      ]
+    },
+    109: {
+      1: [
+        {ar:'قُلْ', root:'ق و ل', pos:'Verb, imperative', case:'2nd person masc. sing.', note:'"Say."'},
+        {ar:'يَا', root:'—', pos:'Vocative particle', case:'—', note:'"O."'},
+        {ar:'أَيُّهَا', root:'—', pos:'Vocative noun', case:'Nominative', note:'"You" — introduces the address.'},
+        {ar:'الْكَافِرُونَ', root:'ك ف ر', pos:'Noun (active participle)', case:'Nominative', note:'Badal — "disbelievers."'}
+      ],
+      2: [
+        {ar:'لَا', root:'—', pos:'Negation particle', case:'—', note:'"Not."'},
+        {ar:'أَعْبُدُ', root:'ع ب د', pos:'Verb, imperfect', case:'1st person sing.', note:'"I worship."'},
+        {ar:'مَا', root:'—', pos:'Relative pronoun', case:'—', note:'"What."'},
+        {ar:'تَعْبُدُونَ', root:'ع ب د', pos:'Verb, imperfect', case:'2nd person masc. plural', note:'"You worship."'}
+      ],
+      3: [
+        {ar:'وَلَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'أَنتُمْ', root:'—', pos:'Pronoun', case:'Nominative', note:'"You."'},
+        {ar:'عَابِدُونَ', root:'ع ب د', pos:'Noun (active participle)', case:'Nominative', note:'Khabar — "worshippers."'},
+        {ar:'مَا', root:'—', pos:'Relative pronoun', case:'—', note:'"What."'},
+        {ar:'أَعْبُدُ', root:'ع ب د', pos:'Verb, imperfect', case:'1st person sing.', note:'"I worship."'}
+      ],
+      4: [
+        {ar:'وَلَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'أَنَا', root:'—', pos:'Pronoun', case:'Nominative', note:'"I."'},
+        {ar:'عَابِدٌ', root:'ع ب د', pos:'Noun (active participle)', case:'Nominative', note:'Khabar — "a worshipper."'},
+        {ar:'مَّا', root:'—', pos:'Relative pronoun', case:'—', note:'"What."'},
+        {ar:'عَبَدتُّمْ', root:'ع ب د', pos:'Verb, perfect', case:'2nd person masc. plural', note:'"You worshipped."'}
+      ],
+      5: [
+        {ar:'وَلَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'أَنتُمْ', root:'—', pos:'Pronoun', case:'Nominative', note:'"You."'},
+        {ar:'عَابِدُونَ', root:'ع ب د', pos:'Noun (active participle)', case:'Nominative', note:'"Worshippers" — restated for emphasis.'},
+        {ar:'مَا', root:'—', pos:'Relative pronoun', case:'—', note:'"What."'},
+        {ar:'أَعْبُدُ', root:'ع ب د', pos:'Verb, imperfect', case:'1st person sing.', note:'"I worship."'}
+      ],
+      6: [
+        {ar:'لَكُمْ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"For you."'},
+        {ar:'دِينُكُمْ', root:'د ي ن', pos:'Noun + pronoun', case:'Nominative', note:'Subject — "your religion."'},
+        {ar:'وَلِيَ', root:'—', pos:'Conjunction + preposition + pronoun', case:'—', note:'"And for me."'},
+        {ar:'دِينِ', root:'د ي ن', pos:'Noun', case:'Nominative', note:'"[My] religion" — the final, decisive closing line.'}
+      ]
+    },
+    107: {
+      1: [
+        {ar:'أَرَأَيْتَ', root:'ر أ ي', pos:'Interrogative + verb, perfect', case:'2nd person masc. sing.', note:'"Have you seen."'},
+        {ar:'الَّذِي', root:'—', pos:'Relative pronoun', case:'—', note:'"The one who."'},
+        {ar:'يُكَذِّبُ', root:'ك ذ ب', pos:'Verb, imperfect (Form II)', case:'3rd person masc. sing.', note:'"Denies."'},
+        {ar:'بِالدِّينِ', root:'د ي ن', pos:'Preposition + noun', case:'Genitive', note:'"The Judgment [Day]."'}
+      ],
+      2: [
+        {ar:'فَذَٰلِكَ', root:'—', pos:'Conjunction + demonstrative pronoun', case:'Nominative', note:'"So that is."'},
+        {ar:'الَّذِي', root:'—', pos:'Relative pronoun', case:'—', note:'"The one who."'},
+        {ar:'يَدُعُّ', root:'د ع ع', pos:'Verb, imperfect', case:'3rd person masc. sing.', note:'"Repels/pushes away harshly."'},
+        {ar:'الْيَتِيمَ', root:'ي ت م', pos:'Noun', case:'Accusative', note:'Object — "the orphan."'}
+      ],
+      3: [
+        {ar:'وَلَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'يَحُضُّ', root:'ح ض ض', pos:'Verb, imperfect', case:'3rd person masc. sing.', note:'"Urges/encourages."'},
+        {ar:'عَلَىٰ طَعَامِ', root:'ط ع م', pos:'Preposition + noun', case:'Genitive', note:'"Upon feeding of."'},
+        {ar:'الْمِسْكِينِ', root:'س ك ن', pos:'Noun', case:'Genitive', note:'"The needy/poor."'}
+      ],
+      4: [
+        {ar:'فَوَيْلٌ', root:'و ي ل', pos:'Conjunction + noun', case:'Nominative', note:'"So woe."'},
+        {ar:'لِّلْمُصَلِّينَ', root:'ص ل و', pos:'Preposition + noun (active participle)', case:'Genitive', note:'"To those who pray."'}
+      ],
+      5: [
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'—', note:'"Who."'},
+        {ar:'هُمْ', root:'—', pos:'Pronoun', case:'Nominative', note:'"They."'},
+        {ar:'عَن صَلَاتِهِمْ', root:'ص ل و', pos:'Preposition + noun + pronoun', case:'Genitive', note:'"Of their prayer."'},
+        {ar:'سَاهُونَ', root:'س ه و', pos:'Noun (active participle)', case:'Nominative', note:'"Heedless/neglectful" — not the act of prayer itself, but carelessness in it.'}
+      ],
+      6: [
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'—', note:'"Who."'},
+        {ar:'هُمْ', root:'—', pos:'Pronoun', case:'Nominative', note:'"They."'},
+        {ar:'يُرَاءُونَ', root:'ر أ ي', pos:'Verb, imperfect (Form III)', case:'3rd person masc. plural', note:'"Show off/are seen [by people]."'}
+      ],
+      7: [
+        {ar:'وَيَمْنَعُونَ', root:'م ن ع', pos:'Conjunction + verb, imperfect', case:'3rd person masc. plural', note:'"And they withhold."'},
+        {ar:'الْمَاعُونَ', root:'—', pos:'Noun', case:'Accusative', note:'"Small acts of assistance/basic necessities" — meaning debated, root uncertain.'}
+      ]
+    },
+    94: {
+      1: [
+        {ar:'أَلَمْ', root:'—', pos:'Interrogative + negation particle', case:'—', note:'"Did not."'},
+        {ar:'نَشْرَحْ', root:'ش ر ح', pos:'Verb, imperfect jussive', case:'1st person plural', note:'"We expand/open."'},
+        {ar:'لَكَ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"For you."'},
+        {ar:'صَدْرَكَ', root:'ص د ر', pos:'Noun + pronoun', case:'Accusative', note:'Object — "your chest."'}
+      ],
+      2: [
+        {ar:'وَوَضَعْنَا', root:'و ض ع', pos:'Conjunction + verb, perfect', case:'1st person plural', note:'"And We removed."'},
+        {ar:'عَنكَ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"From you."'},
+        {ar:'وِزْرَكَ', root:'و ز ر', pos:'Noun + pronoun', case:'Accusative', note:'Object — "your burden."'}
+      ],
+      3: [
+        {ar:'الَّذِي', root:'—', pos:'Relative pronoun', case:'—', note:'"Which."'},
+        {ar:'أَنقَضَ', root:'ن ق ض', pos:'Verb, perfect (Form IV)', case:'3rd person masc. sing.', note:'"Weighed heavily upon/nearly broke."'},
+        {ar:'ظَهْرَكَ', root:'ظ ه ر', pos:'Noun + pronoun', case:'Accusative', note:'Object — "your back."'}
+      ],
+      4: [
+        {ar:'وَرَفَعْنَا', root:'ر ف ع', pos:'Conjunction + verb, perfect', case:'1st person plural', note:'"And We raised."'},
+        {ar:'لَكَ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"For you."'},
+        {ar:'ذِكْرَكَ', root:'ذ ك ر', pos:'Noun + pronoun', case:'Accusative', note:'Object — "your remembrance/mention."'}
+      ],
+      5: [
+        {ar:'فَإِنَّ', root:'—', pos:'Conjunction + accusative particle', case:'—', note:'"So indeed."'},
+        {ar:'مَعَ الْعُسْرِ', root:'ع س ر', pos:'Adverb + noun', case:'Genitive', note:'"With hardship."'},
+        {ar:'يُسْرًا', root:'ي س ر', pos:'Noun', case:'Accusative', note:'Khabar — "ease."'}
+      ],
+      6: [
+        {ar:'إِنَّ', root:'—', pos:'Accusative particle', case:'—', note:'"Indeed."'},
+        {ar:'مَعَ الْعُسْرِ', root:'ع س ر', pos:'Adverb + noun', case:'Genitive', note:'"With hardship" — repeated for emphasis.'},
+        {ar:'يُسْرًا', root:'ي س ر', pos:'Noun', case:'Accusative', note:'"Ease."'}
+      ],
+      7: [
+        {ar:'فَإِذَا', root:'—', pos:'Conjunction + adverb', case:'—', note:'"So when."'},
+        {ar:'فَرَغْتَ', root:'ف ر غ', pos:'Verb, perfect', case:'2nd person masc. sing.', note:'"You have finished/are free."'},
+        {ar:'فَانصَبْ', root:'ن ص ب', pos:'Conjunction + verb, imperative', case:'2nd person masc. sing.', note:'"Then strive/stand up [in worship]."'}
+      ],
+      8: [
+        {ar:'وَإِلَىٰ', root:'—', pos:'Conjunction + preposition', case:'—', note:'"And to."'},
+        {ar:'رَبِّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Genitive', note:'"Your Lord."'},
+        {ar:'فَارْغَب', root:'ر غ ب', pos:'Conjunction + verb, imperative', case:'2nd person masc. sing.', note:'"Then turn with hope/longing."'}
+      ]
+    },
+    95: {
+      1: [
+        {ar:'وَالتِّينِ', root:'ت ي ن', pos:'Oath particle + noun', case:'Genitive', note:'"By the fig."'},
+        {ar:'وَالزَّيْتُونِ', root:'ز ي ت', pos:'Conjunction + noun', case:'Genitive', note:'"And the olive."'}
+      ],
+      2: [
+        {ar:'وَطُورِ', root:'ط و ر', pos:'Conjunction + noun', case:'Genitive', note:'"And Mount."'},
+        {ar:'سِينِينَ', root:'—', pos:'Proper noun', case:'Genitive', note:'"Sinai" — muḍāf ilayh.'}
+      ],
+      3: [
+        {ar:'وَهَٰذَا', root:'—', pos:'Conjunction + demonstrative pronoun', case:'—', note:'"And this."'},
+        {ar:'الْبَلَدِ', root:'ب ل د', pos:'Noun', case:'Genitive', note:'"City/land" — Makkah.'},
+        {ar:'الْأَمِينِ', root:'أ م ن', pos:'Adjective', case:'Genitive', note:'"The secure/trustworthy."'}
+      ],
+      4: [
+        {ar:'لَقَدْ', root:'—', pos:'Emphatic particle', case:'—', note:'"Certainly."'},
+        {ar:'خَلَقْنَا', root:'خ ل ق', pos:'Verb, perfect', case:'1st person plural', note:'"We created."'},
+        {ar:'الْإِنسَانَ', root:'أ ن س', pos:'Noun', case:'Accusative', note:'Object — "man."'},
+        {ar:'فِي أَحْسَنِ', root:'ح س ن', pos:'Preposition + noun (elative)', case:'Genitive', note:'"In the best of."'},
+        {ar:'تَقْوِيمٍ', root:'ق و م', pos:'Noun (verbal noun, Form II)', case:'Genitive', note:'"Stature/form."'}
+      ],
+      5: [
+        {ar:'ثُمَّ', root:'—', pos:'Conjunction', case:'—', note:'"Then."'},
+        {ar:'رَدَدْنَاهُ', root:'ر د د', pos:'Verb, perfect + pronoun', case:'1st person plural', note:'"We returned him."'},
+        {ar:'أَسْفَلَ', root:'س ف ل', pos:'Noun (elative, adverbial)', case:'Accusative', note:'"The lowest of."'},
+        {ar:'سَافِلِينَ', root:'س ف ل', pos:'Noun (active participle, plural)', case:'Genitive', note:'"The low."'}
+      ],
+      6: [
+        {ar:'إِلَّا', root:'—', pos:'Exception particle', case:'—', note:'"Except."'},
+        {ar:'الَّذِينَ', root:'—', pos:'Relative pronoun', case:'—', note:'"Those who."'},
+        {ar:'آمَنُوا', root:'أ م ن', pos:'Verb, perfect', case:'3rd person masc. plural', note:'"Believed."'},
+        {ar:'وَعَمِلُوا', root:'ع م ل', pos:'Conjunction + verb, perfect', case:'—', note:'"And did."'},
+        {ar:'الصَّالِحَاتِ', root:'ص ل ح', pos:'Noun (active participle, plural)', case:'Accusative', note:'"Righteous deeds."'},
+        {ar:'فَلَهُمْ', root:'—', pos:'Conjunction + preposition + pronoun', case:'—', note:'"Then for them [is]."'},
+        {ar:'أَجْرٌ', root:'أ ج ر', pos:'Noun', case:'Nominative', note:'"A reward."'},
+        {ar:'غَيْرُ', root:'غ ي ر', pos:'Noun (adjectival)', case:'Nominative', note:'"Without/not."'},
+        {ar:'مَمْنُونٍ', root:'م ن ن', pos:'Noun (passive participle)', case:'Genitive', note:'"Interrupted/diminished" — unending reward.'}
+      ],
+      7: [
+        {ar:'فَمَا', root:'—', pos:'Conjunction + interrogative', case:'—', note:'"So what."'},
+        {ar:'يُكَذِّبُكَ', root:'ك ذ ب', pos:'Verb, imperfect + pronoun', case:'3rd person masc. sing.', note:'"Makes you deny."'},
+        {ar:'بَعْدُ', root:'ب ع د', pos:'Adverb', case:'—', note:'"After [this]."'},
+        {ar:'بِالدِّينِ', root:'د ي ن', pos:'Preposition + noun', case:'Genitive', note:'"The Judgment."'}
+      ],
+      8: [
+        {ar:'أَلَيْسَ', root:'ل ي س', pos:'Interrogative + verb', case:'—', note:'"Is not."'},
+        {ar:'اللَّهُ', root:'أ ل ه', pos:'Proper noun', case:'Nominative', note:'Subject.'},
+        {ar:'بِأَحْكَمِ', root:'ح ك م', pos:'Preposition (emphatic) + noun (elative)', case:'Genitive', note:'"The most just of."'},
+        {ar:'الْحَاكِمِينَ', root:'ح ك م', pos:'Noun (active participle, plural)', case:'Genitive', note:'"Judges."'}
+      ]
+    },
+    99: {
+      1: [
+        {ar:'إِذَا', root:'—', pos:'Adverb', case:'—', note:'"When."'},
+        {ar:'زُلْزِلَتِ', root:'ز ل ز ل', pos:'Verb, perfect (passive, quadriliteral)', case:'3rd person fem. sing.', note:'"Is shaken."'},
+        {ar:'الْأَرْضُ', root:'أ ر ض', pos:'Noun', case:'Nominative', note:'Subject — "the earth."'},
+        {ar:'زِلْزَالَهَا', root:'ز ل ز ل', pos:'Noun (cognate object) + pronoun', case:'Accusative', note:'"Its [designated] shaking."'}
+      ],
+      2: [
+        {ar:'وَأَخْرَجَتِ', root:'خ ر ج', pos:'Conjunction + verb, perfect (Form IV)', case:'3rd person fem. sing.', note:'"And brings forth."'},
+        {ar:'الْأَرْضُ', root:'أ ر ض', pos:'Noun', case:'Nominative', note:'Subject.'},
+        {ar:'أَثْقَالَهَا', root:'ث ق ل', pos:'Noun + pronoun', case:'Accusative', note:'Object — "its burdens."'}
+      ],
+      3: [
+        {ar:'وَقَالَ', root:'ق و ل', pos:'Conjunction + verb, perfect', case:'3rd person masc. sing.', note:'"And says."'},
+        {ar:'الْإِنسَانُ', root:'أ ن س', pos:'Noun', case:'Nominative', note:'Subject — "man."'},
+        {ar:'مَا', root:'—', pos:'Interrogative pronoun', case:'—', note:'"What."'},
+        {ar:'لَهَا', root:'—', pos:'Preposition + pronoun', case:'—', note:'"[Is] with it."'}
+      ],
+      4: [
+        {ar:'يَوْمَئِذٍ', root:'ي و م', pos:'Adverb', case:'Genitive', note:'"That Day."'},
+        {ar:'تُحَدِّثُ', root:'ح د ث', pos:'Verb, imperfect (Form II)', case:'3rd person fem. sing.', note:'"It relates/narrates."'},
+        {ar:'أَخْبَارَهَا', root:'خ ب ر', pos:'Noun + pronoun', case:'Accusative', note:'Object — "its news."'}
+      ],
+      5: [
+        {ar:'بِأَنَّ', root:'—', pos:'Preposition + particle', case:'—', note:'"Because."'},
+        {ar:'رَبَّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Accusative', note:'Subject (ism of anna) — "your Lord."'},
+        {ar:'أَوْحَىٰ', root:'و ح ي', pos:'Verb, perfect (Form IV)', case:'3rd person masc. sing.', note:'"Revealed/inspired."'},
+        {ar:'لَهَا', root:'—', pos:'Preposition + pronoun', case:'—', note:'"To it."'}
+      ],
+      6: [
+        {ar:'يَوْمَئِذٍ', root:'ي و م', pos:'Adverb', case:'Genitive', note:'"That Day."'},
+        {ar:'يَصْدُرُ', root:'ص د ر', pos:'Verb, imperfect', case:'3rd person masc. sing.', note:'"Come forth/return."'},
+        {ar:'النَّاسُ', root:'ن و س', pos:'Noun', case:'Nominative', note:'Subject — "the people."'},
+        {ar:'أَشْتَاتًا', root:'ش ت ت', pos:'Noun (plural)', case:'Accusative', note:'Circumstantial — "in scattered groups."'},
+        {ar:'لِّيُرَوْا', root:'ر أ ي', pos:'Preposition + verb (passive, Form IV)', case:'—', note:'"So they may be shown."'},
+        {ar:'أَعْمَالَهُمْ', root:'ع م ل', pos:'Noun + pronoun', case:'Accusative', note:'Object — "their deeds."'}
+      ],
+      7: [
+        {ar:'فَمَن', root:'—', pos:'Conjunction + conditional pronoun', case:'—', note:'"So whoever."'},
+        {ar:'يَعْمَلْ', root:'ع م ل', pos:'Verb, imperfect jussive', case:'3rd person masc. sing.', note:'"Does."'},
+        {ar:'مِثْقَالَ', root:'ث ق ل', pos:'Noun', case:'Accusative', note:'"The weight of."'},
+        {ar:'ذَرَّةٍ', root:'ذ ر ر', pos:'Noun', case:'Genitive', note:'"An atom/speck."'},
+        {ar:'خَيْرًا', root:'خ ي ر', pos:'Noun', case:'Accusative', note:'Object — "good."'},
+        {ar:'يَرَهُ', root:'ر أ ي', pos:'Verb, imperfect jussive + pronoun', case:'3rd person masc. sing.', note:'"Will see it."'}
+      ],
+      8: [
+        {ar:'وَمَن', root:'—', pos:'Conjunction + conditional pronoun', case:'—', note:'"And whoever."'},
+        {ar:'يَعْمَلْ', root:'ع م ل', pos:'Verb, imperfect jussive', case:'3rd person masc. sing.', note:'"Does."'},
+        {ar:'مِثْقَالَ', root:'ث ق ل', pos:'Noun', case:'Accusative', note:'"The weight of."'},
+        {ar:'ذَرَّةٍ', root:'ذ ر ر', pos:'Noun', case:'Genitive', note:'"An atom/speck."'},
+        {ar:'شَرًّا', root:'ش ر ر', pos:'Noun', case:'Accusative', note:'Object — "evil" — mirrors v.7 exactly.'},
+        {ar:'يَرَهُ', root:'ر أ ي', pos:'Verb, imperfect jussive + pronoun', case:'3rd person masc. sing.', note:'"Will see it."'}
+      ]
+    },
+    102: {
+      1: [
+        {ar:'أَلْهَاكُمُ', root:'ل ه و', pos:'Verb, perfect (Form IV) + pronoun', case:'3rd person masc. sing.', note:'"Diverts/distracts you."'},
+        {ar:'التَّكَاثُرُ', root:'ك ث ر', pos:'Noun (verbal noun, Form VI)', case:'Nominative', note:'Subject — "rivalry in [worldly] increase."'}
+      ],
+      2: [
+        {ar:'حَتَّىٰ', root:'—', pos:'Preposition', case:'—', note:'"Until."'},
+        {ar:'زُرْتُمُ', root:'ز و ر', pos:'Verb, perfect', case:'2nd person masc. plural', note:'"You visit."'},
+        {ar:'الْمَقَابِرَ', root:'ق ب ر', pos:'Noun (plural)', case:'Accusative', note:'Object — "the graves."'}
+      ],
+      3: [
+        {ar:'كَلَّا', root:'—', pos:'Deterrent particle', case:'—', note:'"No/nay."'},
+        {ar:'سَوْفَ', root:'—', pos:'Future particle', case:'—', note:'"Soon."'},
+        {ar:'تَعْلَمُونَ', root:'ع ل م', pos:'Verb, imperfect', case:'2nd person masc. plural', note:'"You will know."'}
+      ],
+      4: [
+        {ar:'ثُمَّ', root:'—', pos:'Conjunction', case:'—', note:'"Then."'},
+        {ar:'كَلَّا', root:'—', pos:'Deterrent particle', case:'—', note:'"No/nay" — repeated for emphasis.'},
+        {ar:'سَوْفَ', root:'—', pos:'Future particle', case:'—', note:'"Soon."'},
+        {ar:'تَعْلَمُونَ', root:'ع ل م', pos:'Verb, imperfect', case:'2nd person masc. plural', note:'"You will know."'}
+      ],
+      5: [
+        {ar:'كَلَّا', root:'—', pos:'Deterrent particle', case:'—', note:'"No/nay."'},
+        {ar:'لَوْ', root:'—', pos:'Conditional particle', case:'—', note:'"If."'},
+        {ar:'تَعْلَمُونَ', root:'ع ل م', pos:'Verb, imperfect', case:'2nd person masc. plural', note:'"You knew."'},
+        {ar:'عِلْمَ', root:'ع ل م', pos:'Noun (cognate object)', case:'Accusative', note:'"[With] the knowledge of."'},
+        {ar:'الْيَقِينِ', root:'ي ق ن', pos:'Noun', case:'Genitive', note:'"Certainty."'}
+      ],
+      6: [
+        {ar:'لَتَرَوُنَّ', root:'ر أ ي', pos:'Emphatic particle + verb (emphatic nūn)', case:'2nd person masc. plural', note:'"You will surely see."'},
+        {ar:'الْجَحِيمَ', root:'ج ح م', pos:'Noun', case:'Accusative', note:'Object — "the Blazing Fire."'}
+      ],
+      7: [
+        {ar:'ثُمَّ', root:'—', pos:'Conjunction', case:'—', note:'"Then."'},
+        {ar:'لَتَرَوُنَّهَا', root:'ر أ ي', pos:'Emphatic particle + verb + pronoun', case:'2nd person masc. plural', note:'"You will surely see it."'},
+        {ar:'عَيْنَ', root:'ع ي ن', pos:'Noun (cognate/circumstantial)', case:'Accusative', note:'"With the eye of."'},
+        {ar:'الْيَقِينِ', root:'ي ق ن', pos:'Noun', case:'Genitive', note:'"Certainty" — direct, eyewitness certainty.'}
+      ],
+      8: [
+        {ar:'ثُمَّ', root:'—', pos:'Conjunction', case:'—', note:'"Then."'},
+        {ar:'لَتُسْأَلُنَّ', root:'س أ ل', pos:'Emphatic particle + verb (passive, emphatic nūn)', case:'2nd person masc. plural', note:'"You will surely be asked."'},
+        {ar:'يَوْمَئِذٍ', root:'ي و م', pos:'Adverb', case:'Genitive', note:'"That Day."'},
+        {ar:'عَنِ النَّعِيمِ', root:'ن ع م', pos:'Preposition + noun', case:'Genitive', note:'"About the blessing/pleasure [you enjoyed]."'}
+      ]
+    },
+    104: {
+      1: [
+        {ar:'وَيْلٌ', root:'و ي ل', pos:'Noun', case:'Nominative', note:'Subject — "woe."'},
+        {ar:'لِّكُلِّ', root:'ك ل ل', pos:'Preposition + noun', case:'Genitive', note:'"To every."'},
+        {ar:'هُمَزَةٍ', root:'ه م ز', pos:'Noun (intensive)', case:'Genitive', note:'"Slanderer/backbiter."'},
+        {ar:'لُّمَزَةٍ', root:'ل م ز', pos:'Noun (intensive)', case:'Genitive', note:'"Fault-finder" — pairs with humazah.'}
+      ],
+      2: [
+        {ar:'الَّذِي', root:'—', pos:'Relative pronoun', case:'—', note:'"Who."'},
+        {ar:'جَمَعَ', root:'ج م ع', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Gathered/collected."'},
+        {ar:'مَالًا', root:'م و ل', pos:'Noun', case:'Accusative', note:'Object — "wealth."'},
+        {ar:'وَعَدَّدَهُ', root:'ع د د', pos:'Conjunction + verb, perfect (Form II) + pronoun', case:'3rd person masc. sing.', note:'"And counted it repeatedly."'}
+      ],
+      3: [
+        {ar:'يَحْسَبُ', root:'ح س ب', pos:'Verb, imperfect', case:'3rd person masc. sing.', note:'"He thinks."'},
+        {ar:'أَنَّ', root:'—', pos:'Accusative particle', case:'—', note:'"That."'},
+        {ar:'مَالَهُ', root:'م و ل', pos:'Noun + pronoun', case:'Accusative', note:'Subject (ism of anna) — "his wealth."'},
+        {ar:'أَخْلَدَهُ', root:'خ ل د', pos:'Verb, perfect (Form IV) + pronoun', case:'3rd person masc. sing.', note:'"Will make him immortal."'}
+      ],
+      4: [
+        {ar:'كَلَّا', root:'—', pos:'Deterrent particle', case:'—', note:'"No/nay."'},
+        {ar:'لَيُنبَذَنَّ', root:'ن ب ذ', pos:'Emphatic particle + verb (passive, emphatic nūn)', case:'3rd person masc. sing.', note:'"He will surely be thrown."'},
+        {ar:'فِي الْحُطَمَةِ', root:'ح ط م', pos:'Preposition + noun', case:'Genitive', note:'"Into the Crusher."'}
+      ],
+      5: [
+        {ar:'وَمَا', root:'—', pos:'Conjunction + interrogative', case:'—', note:'"And what."'},
+        {ar:'أَدْرَاكَ', root:'د ر ي', pos:'Verb, perfect (Form IV) + pronoun', case:'2nd person masc. sing.', note:'"Makes you know."'},
+        {ar:'مَا', root:'—', pos:'Interrogative pronoun', case:'—', note:'"What [is]."'},
+        {ar:'الْحُطَمَةُ', root:'ح ط م', pos:'Noun', case:'Nominative', note:'"The Crusher."'}
+      ],
+      6: [
+        {ar:'نَارُ', root:'ن و ر', pos:'Noun', case:'Nominative', note:'"Fire of."'},
+        {ar:'اللَّهِ', root:'أ ل ه', pos:'Proper noun', case:'Genitive', note:'Muḍāf ilayh.'},
+        {ar:'الْمُوقَدَةُ', root:'و ق د', pos:'Noun (passive participle, Form IV)', case:'Nominative', note:'"Kindled."'}
+      ],
+      7: [
+        {ar:'الَّتِي', root:'—', pos:'Relative pronoun (fem.)', case:'—', note:'"Which."'},
+        {ar:'تَطَّلِعُ', root:'ط ل ع', pos:'Verb, imperfect (Form VIII)', case:'3rd person fem. sing.', note:'"Rises up/mounts."'},
+        {ar:'عَلَى الْأَفْئِدَةِ', root:'ف أ د', pos:'Preposition + noun (plural)', case:'Genitive', note:'"Over the hearts."'}
+      ],
+      8: [
+        {ar:'إِنَّهَا', root:'—', pos:'Accusative particle + pronoun', case:'Accusative', note:'"Indeed it."'},
+        {ar:'عَلَيْهِم', root:'—', pos:'Preposition + pronoun', case:'—', note:'"Upon them."'},
+        {ar:'مُّؤْصَدَةٌ', root:'و ص د', pos:'Noun (passive participle, Form IV)', case:'Nominative', note:'Khabar — "closed/sealed."'}
+      ],
+      9: [
+        {ar:'فِي عَمَدٍ', root:'ع م د', pos:'Preposition + noun (plural)', case:'Genitive', note:'"In columns."'},
+        {ar:'مُّمَدَّدَةٍ', root:'م د د', pos:'Noun (passive participle, Form II)', case:'Genitive', note:'"Extended/stretched out."'}
+      ]
+    },
+    93: {
+      1: [
+        {ar:'وَالضُّحَىٰ', root:'ض ح و', pos:'Oath particle + noun', case:'Genitive', note:'"By the morning brightness."'}
+      ],
+      2: [
+        {ar:'وَاللَّيْلِ', root:'ل ي ل', pos:'Conjunction + noun', case:'Genitive', note:'"And the night."'},
+        {ar:'إِذَا', root:'—', pos:'Adverb', case:'—', note:'"When."'},
+        {ar:'سَجَىٰ', root:'س ج و', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Grows still/settles."'}
+      ],
+      3: [
+        {ar:'مَا', root:'—', pos:'Negation particle', case:'—', note:'"Not."'},
+        {ar:'وَدَّعَكَ', root:'و د ع', pos:'Verb, perfect (Form II) + pronoun', case:'3rd person masc. sing.', note:'"Has forsaken you."'},
+        {ar:'رَبُّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Nominative', note:'Subject — "your Lord."'},
+        {ar:'وَمَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"And not."'},
+        {ar:'قَلَىٰ', root:'ق ل ي', pos:'Verb, perfect', case:'3rd person masc. sing.', note:'"Detested/hated [you]."'}
+      ],
+      4: [
+        {ar:'وَلَلْآخِرَةُ', root:'أ خ ر', pos:'Conjunction + emphatic particle + noun', case:'Nominative', note:'Subject — "and surely the Hereafter."'},
+        {ar:'خَيْرٌ', root:'خ ي ر', pos:'Noun', case:'Nominative', note:'Khabar — "[is] better."'},
+        {ar:'لَّكَ', root:'—', pos:'Preposition + pronoun', case:'—', note:'"For you."'},
+        {ar:'مِنَ الْأُولَىٰ', root:'أ و ل', pos:'Preposition + noun', case:'Genitive', note:'"Than the first [life]."'}
+      ],
+      5: [
+        {ar:'وَلَسَوْفَ', root:'—', pos:'Conjunction + emphatic + future particle', case:'—', note:'"And surely soon."'},
+        {ar:'يُعْطِيكَ', root:'ع ط و', pos:'Verb, imperfect (Form IV) + pronoun', case:'3rd person masc. sing.', note:'"Will give you."'},
+        {ar:'رَبُّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Nominative', note:'Subject — "your Lord."'},
+        {ar:'فَتَرْضَىٰ', root:'ر ض و', pos:'Conjunction + verb, imperfect', case:'2nd person masc. sing.', note:'"And you will be pleased."'}
+      ],
+      6: [
+        {ar:'أَلَمْ', root:'—', pos:'Interrogative + negation particle', case:'—', note:'"Did not."'},
+        {ar:'يَجِدْكَ', root:'و ج د', pos:'Verb, imperfect jussive + pronoun', case:'3rd person masc. sing.', note:'"Find you."'},
+        {ar:'يَتِيمًا', root:'ي ت م', pos:'Noun', case:'Accusative', note:'Circumstantial — "an orphan."'},
+        {ar:'فَآوَىٰ', root:'أ و ي', pos:'Conjunction + verb, perfect', case:'3rd person masc. sing.', note:'"So He sheltered/gave refuge."'}
+      ],
+      7: [
+        {ar:'وَوَجَدَكَ', root:'و ج د', pos:'Conjunction + verb, perfect + pronoun', case:'3rd person masc. sing.', note:'"And He found you."'},
+        {ar:'ضَالًّا', root:'ض ل ل', pos:'Noun (active participle)', case:'Accusative', note:'Circumstantial — "astray/unguided [in worldly knowledge]."'},
+        {ar:'فَهَدَىٰ', root:'ه د ي', pos:'Conjunction + verb, perfect', case:'3rd person masc. sing.', note:'"So He guided [you]."'}
+      ],
+      8: [
+        {ar:'وَوَجَدَكَ', root:'و ج د', pos:'Conjunction + verb, perfect + pronoun', case:'3rd person masc. sing.', note:'"And He found you."'},
+        {ar:'عَائِلًا', root:'ع ي ل', pos:'Noun (active participle)', case:'Accusative', note:'Circumstantial — "poor/needy."'},
+        {ar:'فَأَغْنَىٰ', root:'غ ن ي', pos:'Conjunction + verb, perfect (Form IV)', case:'3rd person masc. sing.', note:'"So He enriched [you]."'}
+      ],
+      9: [
+        {ar:'فَأَمَّا', root:'—', pos:'Conjunction + particle', case:'—', note:'"So as for."'},
+        {ar:'الْيَتِيمَ', root:'ي ت م', pos:'Noun', case:'Accusative', note:'Topic — "the orphan."'},
+        {ar:'فَلَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"Then do not."'},
+        {ar:'تَقْهَرْ', root:'ق ه ر', pos:'Verb, imperfect jussive', case:'2nd person masc. sing.', note:'"Oppress/overpower."'}
+      ],
+      10: [
+        {ar:'وَأَمَّا', root:'—', pos:'Conjunction + particle', case:'—', note:'"And as for."'},
+        {ar:'السَّائِلَ', root:'س أ ل', pos:'Noun (active participle)', case:'Accusative', note:'Topic — "the petitioner/beggar."'},
+        {ar:'فَلَا', root:'—', pos:'Conjunction + negation particle', case:'—', note:'"Then do not."'},
+        {ar:'تَنْهَرْ', root:'ن ه ر', pos:'Verb, imperfect jussive', case:'2nd person masc. sing.', note:'"Repel harshly/scold."'}
+      ],
+      11: [
+        {ar:'وَأَمَّا', root:'—', pos:'Conjunction + particle', case:'—', note:'"And as for."'},
+        {ar:'بِنِعْمَةِ', root:'ن ع م', pos:'Preposition + noun', case:'Genitive', note:'"The favor of."'},
+        {ar:'رَبِّكَ', root:'ر ب ب', pos:'Noun + pronoun', case:'Genitive', note:'"Your Lord."'},
+        {ar:'فَحَدِّثْ', root:'ح د ث', pos:'Conjunction + verb, imperative (Form II)', case:'2nd person masc. sing.', note:'"Then proclaim/speak of [it]."'}
+      ]
     }
   };
 
@@ -450,6 +1287,13 @@
   function posColor(pos){
     const cat = posCategory(pos);
     return cat==='verb' ? 'var(--pos-verb)' : cat==='noun' ? 'var(--pos-noun)' : 'var(--pos-particle)';
+  }
+
+  // Renders a full verse as one connected, color-coded line (used by both
+  // the Word by Word and Translation tabs) so the sentence is readable
+  // as a whole, not just as isolated word cards.
+  function buildFullVerseHTML(words){
+    return words.map(w => `<span style="color:${posColor(w.pos)};">${w.ar}</span>`).join(' ');
   }
 
   // Rough Arabic -> Buckwalter transliteration, just enough for root letters,
@@ -506,13 +1350,18 @@
     const words = (GRAMMAR_DATA[c] && GRAMMAR_DATA[c][v]) || null;
     const grammarContent = document.getElementById('grammarContent');
     const noGrammarHint = document.getElementById('noGrammarHint');
+    const fullVerseLine = document.getElementById('fullVerseLine');
     document.getElementById('wordDetail').style.display = 'none';
     if(!words){
       grammarContent.innerHTML = '';
+      fullVerseLine.innerHTML = '';
+      fullVerseLine.style.display = 'none';
       noGrammarHint.style.display = 'block';
       return;
     }
     noGrammarHint.style.display = 'none';
+    fullVerseLine.style.display = 'block';
+    fullVerseLine.innerHTML = buildFullVerseHTML(words);
     grammarContent.innerHTML = `
       <div class="card">
         ${words.map((w,i) => `
@@ -531,6 +1380,202 @@
         showWordDetail(w.root, w.ar);
       });
     });
+  }
+
+  // Plain English renderings (original, not copied from any published
+  // translation) for every verse GRAMMAR_DATA currently covers.
+  const TRANSLATIONS = {
+    1: {
+      1: 'In the name of Allah, the Most Gracious, the Most Merciful.',
+      2: 'All praise belongs to Allah, Lord of all the worlds,',
+      3: 'The Most Gracious, the Most Merciful,',
+      4: 'Master of the Day of Judgment.',
+      5: 'You alone we worship, and You alone we ask for help.',
+      6: 'Guide us to the straight path,',
+      7: 'The path of those You have blessed, not of those who earned Your anger, nor of those who went astray.'
+    },
+    2: {
+      1: 'Alif. Lam. Meem.',
+      2: 'This is the Book — there is no doubt in it — a guidance for those mindful of Allah,',
+      3: 'Who believe in the unseen, establish prayer, and spend from what We have provided them,',
+      4: 'And who believe in what has been sent down to you, and what was sent down before you, and are certain of the Hereafter.',
+      5: 'They are the ones guided by their Lord, and it is they who will succeed.',
+      6: 'As for those who disbelieve, it is the same for them whether you warn them or not — they will not believe.',
+      7: 'Allah has sealed their hearts and their hearing, and over their sight is a veil. For them is a tremendous punishment.',
+      8: 'Among the people are some who say, "We believe in Allah and the Last Day," yet they are not [true] believers.',
+      9: 'They seek to deceive Allah and the believers, but they deceive none but themselves, though they do not perceive it.',
+      10: 'In their hearts is a sickness, and Allah has increased their sickness. For them is a painful punishment for their lying.',
+      11: 'When it is said to them, "Do not spread corruption in the land," they say, "We are only reformers."',
+      12: 'Indeed, they are the corrupters, but they do not perceive it.',
+      13: 'When it is said to them, "Believe as the people have believed," they say, "Shall we believe as the fools have believed?" Indeed, they are the fools, but they do not know it.',
+      14: 'When they meet the believers, they say, "We believe," but when alone with their evil companions, they say, "We are with you; we were only mocking."',
+      15: 'Allah mocks them in return, and prolongs them in their transgression, wandering blindly.',
+      16: 'These are the ones who bought misguidance at the price of guidance, so their trade brought no profit, nor were they guided.'
+    },
+    93: {
+      1: 'By the morning brightness,',
+      2: 'And by the night when it grows still,',
+      3: 'Your Lord has not forsaken you, nor does He hate you.',
+      4: 'And the Hereafter is surely better for you than this first life.',
+      5: 'And your Lord will surely give you, and you will be satisfied.',
+      6: 'Did He not find you an orphan and shelter you?',
+      7: 'And He found you unguided [in worldly knowledge] and guided you,',
+      8: 'And He found you in need and enriched you.',
+      9: 'So as for the orphan, do not oppress him,',
+      10: 'And as for the one who asks, do not repel him harshly,',
+      11: 'And as for the favor of your Lord, speak of it.'
+    },
+    94: {
+      1: 'Did We not expand your chest for you?',
+      2: 'And We removed from you your burden,',
+      3: 'Which weighed heavily upon your back,',
+      4: 'And We raised for you your remembrance.',
+      5: 'So indeed, with hardship comes ease.',
+      6: 'Indeed, with hardship comes ease.',
+      7: 'So when you have finished, strive on,',
+      8: 'And to your Lord turn with hope.'
+    },
+    95: {
+      1: 'By the fig and the olive,',
+      2: 'And Mount Sinai,',
+      3: 'And this secure city,',
+      4: 'We have certainly created man in the best of forms,',
+      5: 'Then We return him to the lowest of the low,',
+      6: 'Except those who believe and do righteous deeds — for them is a reward unfailing.',
+      7: 'So what makes you deny the Judgment after this?',
+      8: 'Is not Allah the most just of judges?'
+    },
+    97: {
+      1: 'Indeed, We sent it down during the Night of Decree.',
+      2: 'And what will make you know what the Night of Decree is?',
+      3: 'The Night of Decree is better than a thousand months.',
+      4: 'The angels and the Spirit descend during it, by the permission of their Lord, for every affair.',
+      5: 'Peace it is, until the rising of dawn.'
+    },
+    99: {
+      1: 'When the earth is shaken with its [final] shaking,',
+      2: 'And the earth brings forth its burdens,',
+      3: 'And man says, "What is wrong with it?"',
+      4: 'That Day it will relate its news,',
+      5: 'Because your Lord has inspired it.',
+      6: 'That Day people will come forth in separate groups to be shown their deeds.',
+      7: 'So whoever does an atom\'s weight of good will see it,',
+      8: 'And whoever does an atom\'s weight of evil will see it.'
+    },
+    102: {
+      1: 'Competing for more [worldly gain] distracts you,',
+      2: 'Until you visit the graves.',
+      3: 'No! You will soon know.',
+      4: 'Then no! You will soon know.',
+      5: 'No! If only you knew with certainty of knowledge...',
+      6: 'You will surely see the Blazing Fire.',
+      7: 'Then you will surely see it with the eye of certainty.',
+      8: 'Then you will surely be asked that Day about the pleasures [you enjoyed].'
+    },
+    103: {
+      1: 'By time,',
+      2: 'Indeed, mankind is in loss,',
+      3: 'Except those who believe, do righteous deeds, and advise one another to truth and to patience.'
+    },
+    104: {
+      1: 'Woe to every slanderer and fault-finder,',
+      2: 'Who collects wealth and counts it over,',
+      3: 'Thinking that his wealth will make him immortal.',
+      4: 'No! He will surely be thrown into the Crusher.',
+      5: 'And what will make you know what the Crusher is?',
+      6: 'It is the fire of Allah, kindled,',
+      7: 'Which rises up over the hearts.',
+      8: 'Indeed, it will be closed down upon them,',
+      9: 'In extended columns.'
+    },
+    105: {
+      1: 'Have you not seen how your Lord dealt with the companions of the elephant?',
+      2: 'Did He not make their plot go astray?',
+      3: 'And He sent against them birds in flocks,',
+      4: 'Striking them with stones of baked clay,',
+      5: 'And made them like eaten straw.'
+    },
+    106: {
+      1: 'For the familiar security of Quraysh,',
+      2: 'Their security in the winter and summer journeys,',
+      3: 'Let them worship the Lord of this House,',
+      4: 'Who fed them against hunger and secured them from fear.'
+    },
+    107: {
+      1: 'Have you seen the one who denies the Judgment?',
+      2: 'That is the one who pushes away the orphan,',
+      3: 'And does not urge the feeding of the needy.',
+      4: 'So woe to those who pray,',
+      5: 'Who are heedless of their prayer,',
+      6: 'Who only show off,',
+      7: 'And withhold small acts of assistance.'
+    },
+    108: {
+      1: 'Indeed, We have given you abundance.',
+      2: 'So pray to your Lord and sacrifice.',
+      3: 'Indeed, it is your enemy who is cut off [without lasting legacy].'
+    },
+    109: {
+      1: 'Say: O disbelievers,',
+      2: 'I do not worship what you worship,',
+      3: 'Nor do you worship what I worship,',
+      4: 'Nor will I worship what you have worshipped,',
+      5: 'Nor will you worship what I worship.',
+      6: 'To you your religion, and to me my religion.'
+    },
+    110: {
+      1: 'When the help of Allah comes, and the victory,',
+      2: 'And you see people entering the religion of Allah in crowds,',
+      3: 'Then glorify the praise of your Lord, and seek His forgiveness. Indeed, He is ever-accepting of repentance.'
+    },
+    111: {
+      1: 'May the hands of Abu Lahab perish, and he himself perish.',
+      2: 'His wealth will not avail him, nor what he earned.',
+      3: 'He will burn in a flaming fire,',
+      4: 'And his wife [as well], the carrier of firewood,',
+      5: 'With a rope of palm-fiber around her neck.'
+    },
+    112: {
+      1: 'Say: He is Allah, the One.',
+      2: 'Allah, the Self-Sufficient Master [on whom all depend, while He depends on none].',
+      3: 'He begets not, nor is He begotten.',
+      4: 'And there is none comparable to Him.'
+    },
+    113: {
+      1: 'Say: I seek refuge in the Lord of the daybreak,',
+      2: 'From the evil of what He created,',
+      3: 'And from the evil of darkness when it settles,',
+      4: 'And from the evil of those who blow on knots [practicing sorcery],',
+      5: 'And from the evil of an envier when he envies.'
+    },
+    114: {
+      1: 'Say: I seek refuge in the Lord of mankind,',
+      2: 'The King of mankind,',
+      3: 'The God of mankind,',
+      4: 'From the evil of the retreating whisperer,',
+      5: 'Who whispers into the chests of mankind,',
+      6: 'From among the jinn and mankind.'
+    }
+  };
+
+  function renderOfflineTranslation(){
+    const c = chapterInput.value || 1, v = verseInput.value || 1;
+    const words = (GRAMMAR_DATA[c] && GRAMMAR_DATA[c][v]) || null;
+    const text = (TRANSLATIONS[c] && TRANSLATIONS[c][v]) || null;
+    const translationContent = document.getElementById('translationContent');
+    const noTranslationHint = document.getElementById('noTranslationHint');
+    if(!words || !text){
+      translationContent.innerHTML = '';
+      noTranslationHint.style.display = 'block';
+      return;
+    }
+    noTranslationHint.style.display = 'none';
+    translationContent.innerHTML = `
+      <div class="card">
+        <div style="text-align:right; direction:rtl; font-size:1.3rem; line-height:2;">${buildFullVerseHTML(words)}</div>
+        <div style="margin-top:.7rem; padding-top:.6rem; border-top:1px solid var(--line); font-size:.95rem; line-height:1.5;">${text}</div>
+        <div class="hint" style="margin-top:.5rem;">An original rendering, not copied from any published translation.</div>
+      </div>`;
   }
 
   // Root meanings — a compact offline lexicon covering the roots added so far
@@ -592,7 +1637,167 @@
     'ك ث ر': 'To be many, abundant; kathrah — abundance.',
     'ن ح ر': 'To sacrifice (an animal), or the upper chest; naḥr — the act of sacrificial slaughter.',
     'ش ن أ': 'To hate intensely; shanaʾān — intense hatred.',
-    'ب ت ر': 'To cut off, sever; abtar — cut off, without lasting continuation/legacy.'
+    'ب ت ر': 'To cut off, sever; abtar — cut off, without lasting continuation/legacy.',
+    'م ر ض': 'Sickness, disease; maraḍ — illness, here of the heart (spiritual sickness).',
+    'ز ي د': 'To increase, add; ziyādah — increase.',
+    'أ ل م': 'Pain; alīm — painful.',
+    'ك ذ ب': 'To lie; kadhib — falsehood.',
+    'ف س د': 'To corrupt, spoil; fasād — corruption.',
+    'أ ر ض': 'Earth, land; arḍ — the ground/land.',
+    'ص ل ح': 'To be righteous, sound, reformed; ṣalāḥ/iṣlāḥ — righteousness/reform.',
+    'ل ق ي': 'To meet, encounter; liqāʾ — a meeting.',
+    'خ ل و': 'To be alone, empty, vacant; khalwah — solitude/privacy.',
+    'ش ط ن': 'To be distant/rebellious; shayṭān — devil, one far removed from good.',
+    'ه ز أ': 'To mock, ridicule; istihzāʾ — mockery.',
+    'م د د': 'To extend, prolong, supply; madd — extension, a stretching out.',
+    'ط غ ي': 'To exceed limits, transgress; ṭughyān — excessive transgression.',
+    'ع م ه': 'To wander in confusion, blind bewilderment; ʿamah — blind wandering.',
+    'ش ر ي': 'To buy, sell, trade; ishtirāʾ — a purchase/trade (often a bad exchange in the Quran).',
+    'ت ج ر': 'To trade, do commerce; tijārah — trade, a transaction.',
+    'ر ب ح': 'To profit, gain; ribḥ — profit.',
+    'س ف ه': 'Foolishness, poor judgment; safah — folly.',
+    'ج ي أ': 'To come; majīʾ — coming/arrival.',
+    'ن ص ر': 'To help, aid, grant victory; naṣr — help/victory.',
+    'ف ت ح': 'To open; fatḥ — an opening, also conquest.',
+    'ر أ ي': 'To see; ruʾyah — sight/seeing.',
+    'د خ ل': 'To enter; dukhūl — entry.',
+    'ف و ج': 'A troop, crowd moving together; afwāj — troops/crowds.',
+    'س ب ح': 'To glorify, declare transcendence; tasbīḥ — glorification.',
+    'غ ف ر': 'To forgive, cover over; maghfirah — forgiveness.',
+    'ت و ب': 'To return, repent; tawbah — repentance; tawwāb (of Allah) — ever-accepting of it.',
+    'ع ص ر': 'Time, an age, the pressing of something; ʿaṣr — time/age, also afternoon.',
+    'أ ن س': 'To be sociable, familiar; insān — human being (one who is social by nature).',
+    'خ س ر': 'To lose, suffer loss; khusr/khusrān — loss.',
+    'ع م ل': 'To do, act, work; ʿamal — deed/action.',
+    'و ص ي': 'To enjoin, advise, bequeath; tawāṣī — mutually advising one another.',
+    'ح ق ق': 'Truth, that which is due/real; ḥaqq — truth, a right.',
+    'ص ب ر': 'To be patient, restrain oneself; ṣabr — patience.',
+    'ع و ذ': 'To seek refuge, take shelter; ʿawdh — seeking refuge.',
+    'ف ل ق': 'To split, cleave open; falaq — the splitting open of dawn/daybreak.',
+    'ش ر ر': 'Evil, harm; sharr — evil.',
+    'خ ل ق': 'To create; khalq — creation.',
+    'غ س ق': 'To grow dark; ghasaq — the dark of night.',
+    'و ق ب': 'To enter/settle into a cavity; wuqūb — settling in, gathering darkness.',
+    'ن ف ث': 'To blow gently (as in traditional practice/spitting with breath); nafth — a blowing.',
+    'ع ق د': 'To tie, knot, contract; ʿuqdah — a knot.',
+    'ح س د': 'To envy; ḥasad — envy.',
+    'و س و س': 'To whisper insinuatingly; waswasah — whispering (of Satan).',
+    'خ ن س': 'To retreat, withdraw, slink back; khannās — one who slinks away.',
+    'ص د ر': 'The chest/breast, also to originate from; ṣadr — chest, seat of thought/feeling.',
+    'ج ن ن': 'To conceal, be hidden; jinn — unseen beings; also janna (garden, something concealed by foliage).',
+    'أ ل ف': 'To be accustomed, familiar, joined; īlāf — a covenant/accustomed security (as in trade caravans).',
+    'ر ح ل': 'To journey, depart; riḥlah — a journey.',
+    'ش ت و': 'Winter; shitāʾ — winter.',
+    'ص ي ف': 'Summer; ṣayf — summer.',
+    'ب ي ت': 'A house, dwelling; bayt — house (here, the Kaʿbah).',
+    'ط ع م': 'To feed, taste; ṭaʿām — food.',
+    'ج و ع': 'Hunger; jūʿ — hunger.',
+    'خ و ف': 'Fear; khawf — fear.',
+    'ل ي ل': 'Night; layl/laylah — night.',
+    'ق د ر': 'To measure, decree, empower; qadr — decree/measure/power.',
+    'د ر ي': 'To know, be aware; dirāyah — knowledge/awareness.',
+    'خ ي ر': 'Good, better; khayr — good/goodness.',
+    'ش ه ر': 'Month; shahr — month (also fame, being well-known).',
+    'ر و ح': 'Spirit, breath of life; rūḥ — spirit.',
+    'أ ذ ن': 'To permit, or an ear (to listen); idhn — permission.',
+    'ك ل ل': 'All, every, entirety; kull — every/all.',
+    'أ م ر': 'A matter, command; amr — affair/command.',
+    'س ل م': 'Peace, safety, submission; salām — peace; islām — submission.',
+    'ط ل ع': 'To rise, appear, ascend; ṭulūʿ — rising.',
+    'ف ج ر': 'To split open/burst forth; fajr — dawn (light bursting forth).',
+    'ف ع ل': 'To do, act; fiʿl — an action/deed.',
+    'ص ح ب': 'To accompany, keep company; ṣāḥib — companion.',
+    'ف ي ل': 'Elephant; fīl — elephant.',
+    'ج ع ل': 'To make, place, appoint; jaʿl — a making/appointing.',
+    'ك ي د': 'To scheme, plot; kayd — a plot/scheme.',
+    'ر س ل': 'To send; risālah — a message; rasūl — messenger.',
+    'ط ي ر': 'To fly; ṭayr — birds.',
+    'ر م ي': 'To throw, cast, pelt; ramy — throwing.',
+    'ح ج ر': 'A stone; ḥajar — stone.',
+    'ع ص ف': 'Chaff, dry stalks/husk; ʿaṣf — straw/husk.',
+    'أ ك ل': 'To eat; akl — eating.',
+    'ت ب ب': 'To perish, be ruined; tabb/tabbat — perishing, ruin.',
+    'ي د ي': 'Hand; yad — hand.',
+    'ل ه ب': 'Flame; lahab — flame/blaze.',
+    'غ ن ي': 'To be free of need, wealthy, avail; ghinā — sufficiency/wealth.',
+    'م و ل': 'Wealth, property; māl — wealth.',
+    'ك س ب': 'To earn, acquire; kasb — earning.',
+    'ص ل ي': 'To burn, roast, enter fire; ṣalā/iṣtilāʾ — burning/entering fire.',
+    'ن و ر': 'Light, fire (in some uses); nūr — light; nār — fire.',
+    'م ر أ': 'Woman, person; imraʾah — woman/wife.',
+    'ح م ل': 'To carry, bear; ḥaml — carrying/burden.',
+    'ح ط ب': 'Firewood; ḥaṭab — firewood.',
+    'ج ي د': 'Neck; jīd — neck.',
+    'ح ب ل': 'Rope, cord; ḥabl — rope.',
+    'م س د': 'Twisted palm-fiber; masad — fiber rope/cord.',
+    'د ع ع': 'To push/shove roughly; daʿʿ — a rough push.',
+    'ي ت م': 'To be orphaned; yatīm — orphan.',
+    'ح ض ض': 'To urge, incite; ḥaḍḍ — urging/encouraging.',
+    'س ك ن': 'To dwell, be still; miskīn — one made still/needy by hardship (the poor).',
+    'و ي ل': 'Woe, ruin; wayl — a word of grief/warning ("woe to...").',
+    'س ه و': 'To be heedless, forgetful; sahw — heedlessness.',
+    'م ن ع': 'To withhold, prevent; manʿ — withholding.',
+    'ش ر ح': 'To expand, open up; sharḥ — expansion/explanation.',
+    'و ض ع': 'To put down, remove, place; waḍʿ — placing/putting down.',
+    'و ز ر': 'A burden, sin; wizr — a heavy burden.',
+    'ن ق ض': 'To break, weigh down, undo; naqḍ — breaking/undoing.',
+    'ظ ه ر': 'The back, also to appear/become manifest; ẓahr — back.',
+    'ر ف ع': 'To raise, elevate; rafʿ — raising.',
+    'ذ ك ر': 'To remember, mention; dhikr — remembrance/mention.',
+    'ع س ر': 'Difficulty, hardship; ʿusr — hardship.',
+    'ي س ر': 'Ease; yusr — ease.',
+    'ف ر غ': 'To finish, be free/empty of a task; farāgh — being free/finished.',
+    'ن ص ب': 'To stand up, set upright, exert effort; naṣb — exertion/setting upright.',
+    'ر غ ب': 'To desire, turn toward with hope; raghbah — longing/desire.',
+    'ت ي ن': 'Fig; tīn — the fig fruit/tree.',
+    'ز ي ت': 'Olive/oil; zayt — olive oil; zaytūn — olive.',
+    'ط و ر': 'A mount, or a stage/turn; ṭūr — mount (as in Mount Sinai).',
+    'ب ل د': 'A city, land, town; balad — city/land.',
+    'ح س ن': 'To be good, beautiful; ḥusn — goodness/beauty.',
+    'ر د د': 'To return, send back; radd — a returning.',
+    'س ف ل': 'To be low; asfal — the lowest.',
+    'أ ج ر': 'A reward, wage; ajr — reward.',
+    'م ن ن': 'To bestow a favor, or to cut short/diminish; mamnūn — cut off/diminished (context-dependent; also minnah — favor).',
+    'ب ع د': 'After, distance; baʿd — after.',
+    'ل ي س': 'Not to be, negation of a nominal sentence; laysa — "is not."',
+    'ح ك م': 'To judge, rule with wisdom; ḥukm — judgment/rule.',
+    'ز ل ز ل': 'To shake violently (quadriliteral, from the doubled root ز ل); zalzalah — a violent shaking.',
+    'خ ر ج': 'To go/come out; khurūj — exiting.',
+    'ث ق ل': 'To be heavy; thiql/mithqāl — weight.',
+    'ح د ث': 'To happen, narrate, be new; ḥadīth — a narration/an event.',
+    'خ ب ر': 'News, information; khabar — news.',
+    'و ح ي': 'To reveal, inspire; waḥy — revelation.',
+    'ش ت ت': 'To scatter, disperse; shatāt — scattered groups.',
+    'ذ ر ر': 'A tiny particle, atom, ant; dharrah — a speck/atom.',
+    'ل ه و': 'To be distracted, engaged in idle amusement; lahw — diversion/amusement.',
+    'ز و ر': 'To visit; ziyārah — a visit.',
+    'ق ب ر': 'A grave; qabr — grave.',
+    'ج ح م': 'To blaze fiercely; jaḥīm — a blazing fire.',
+    'ع ي ن': 'Eye, also a spring of water; ʿayn — eye/spring.',
+    'س أ ل': 'To ask, question; suʾāl — a question.',
+    'ه م ز': 'To slander, backbite verbally; humazah — a slanderer.',
+    'ل م ز': 'To find fault, defame; lumazah — a fault-finder.',
+    'ج م ع': 'To gather, collect; jamʿ — gathering.',
+    'ع د د': 'To count; ʿadad — a count/number.',
+    'ح س ب': 'To think, calculate, reckon; ḥisāb — reckoning/calculation.',
+    'خ ل د': 'To be eternal, remain forever; khulūd — eternity.',
+    'ن ب ذ': 'To throw away, discard; nabdh — a casting away/discarding.',
+    'ح ط م': 'To crush, break into pieces; ḥuṭamah — the Crusher.',
+    'و ق د': 'To kindle, light a fire; waqūd — fuel/kindling.',
+    'ف أ د': 'The heart (as seat of understanding); fuʾād — heart/mind.',
+    'و ص د': 'To close, shut firmly; mūṣadah — closed/sealed shut.',
+    'ع م د': 'A pillar, column; ʿamad — columns/pillars.',
+    'ض ح و': 'Forenoon brightness; ḍuḥā — the morning after sunrise.',
+    'س ج و': 'To become still, calm, settled; sajw — stillness/calm.',
+    'و د ع': 'To leave, bid farewell, forsake; wadāʿ — a farewell.',
+    'ق ل ي': 'To detest, dislike intensely; qilan — detestation.',
+    'أ و ل': 'First, foremost; awwal — first.',
+    'ر ض و': 'To be pleased, content; riḍā — contentment/pleasure.',
+    'و ج د': 'To find; wujūd — finding/existence.',
+    'أ و ي': 'To take shelter, give refuge; maʾwā — a shelter/refuge.',
+    'ع ي ل': 'To be poor, needy, have dependents; ʿāʾil — poor/burdened with need.',
+    'ق ه ر': 'To overpower, oppress; qahr — overpowering force.',
+    'ن ه ر': 'To scold harshly, repel; intihār — a harsh rebuke.'
   };
 
   function collectAllRoots(){
